@@ -1,0 +1,13 @@
+{
+  "name": "stock-simulation",
+  "version": "1.0.0",
+  "description": "Zach Stock Game — web version for classroom use",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "socket.io": "^4.7.5"
+  }
+}

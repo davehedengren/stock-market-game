@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Stock Market Game</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --card: #0f3460;
+    --accent: #e94560;
+    --green: #4caf50;
+    --text: #eee;
+    --muted: #999;
+    --radius: 10px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ---------- Header ---------- */
+  header {
+    background: var(--surface);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--accent);
+  }
+  header h1 { font-size: 1.1rem; }
+  .room-badge {
+    background: var(--accent);
+    padding: 4px 12px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+  }
+  .round-badge {
+    background: var(--card);
+    padding: 4px 10px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+
+  /* ---------- Views ---------- */
+  .view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* ---------- Landing ---------- */
+  #landing {
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+  #landing h2 { font-size: 1.8rem; margin-bottom: 8px; }
+  #landing p { color: var(--muted); margin-bottom: 16px; }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    color: #fff;
+    transition: opacity .15s;
+  }
+  .btn:active { opacity: .8; }
+  .btn-primary { background: var(--accent); }
+  .btn-secondary { background: var(--card); }
+  .btn-green { background: var(--green); }
+  .btn-small { padding: 8px 16px; font-size: .85rem; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .join-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 300px;
+  }
+  .join-form input {
+    padding: 12px;
+    border-radius: var(--radius);
+    border: 2px solid var(--card);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 1rem;
+    text-align: center;
+  }
+  .join-form input::placeholder { color: var(--muted); }
+  .join-form input.code-input {
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+  .error-msg { color: var(--accent); font-size: .85rem; min-height: 1.2em; }
+
+  /* ---------- Teacher Dashboard ---------- */
+  .teacher-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .dice-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .dice-card {
+    padding: 10px;
+    border-radius: var(--radius);
+    text-align: center;
+    color: #000;
+    font-weight: 600;
+  }
+  .dice-card .die-value { font-size: 1.5rem; }
+  .dice-card .return-pct { font-size: 1.1rem; }
+  .dice-card .asset-label { font-size: .75rem; opacity: .7; }
+  .cash-flow-card {
+    background: var(--card);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    text-align: center;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  /* ---------- Leaderboard ---------- */
+  .leaderboard { margin-bottom: 16px; }
+  .leaderboard h3 { margin-bottom: 8px; }
+  .lb-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--surface);
+    border-radius: 6px;
+    margin-bottom: 4px;
+    align-items: center;
+  }
+  .lb-row.rank-1 { background: linear-gradient(90deg, #ffd70033, var(--surface)); border-left: 3px solid #ffd700; }
+  .lb-row.rank-2 { border-left: 3px solid #c0c0c0; }
+  .lb-row.rank-3 { border-left: 3px solid #cd7f32; }
+  .lb-rank { font-weight: 700; width: 28px; }
+  .lb-name { flex: 1; margin-left: 8px; }
+  .lb-name.disconnected { opacity: .5; }
+  .lb-worth { font-weight: 700; color: var(--green); }
+
+  /* ---------- Player Details (teacher expandable) ---------- */
+  .player-details { margin-bottom: 16px; }
+  .player-expand {
+    background: var(--surface);
+    border-radius: var(--radius);
+    margin-bottom: 6px;
+    overflow: hidden;
+  }
+  .player-expand-header {
+    padding: 10px 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .player-expand-header:hover { background: var(--card); }
+  .player-expand-body {
+    padding: 0 12px 10px;
+    font-size: .85rem;
+  }
+  .player-expand-body table { width: 100%; border-collapse: collapse; }
+  .player-expand-body td, .player-expand-body th {
+    padding: 4px 8px;
+    text-align: left;
+  }
+  .player-expand-body th { color: var(--muted); font-weight: 400; }
+
+  /* ---------- Student View ---------- */
+  .student-stats {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .stat-box {
+    flex: 1;
+    background: var(--surface);
+    padding: 12px;
+    border-radius: var(--radius);
+    text-align: center;
+  }
+  .stat-label { font-size: .75rem; color: var(--muted); text-transform: uppercase; }
+  .stat-value { font-size: 1.3rem; font-weight: 700; }
+  .stat-value.cash { color: var(--green); }
+
+  .asset-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .asset-table th {
+    text-align: left;
+    padding: 8px;
+    font-size: .75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--card);
+  }
+  .asset-table td {
+    padding: 8px;
+    border-bottom: 1px solid #ffffff0d;
+    vertical-align: middle;
+  }
+  .asset-color {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+  }
+  .trade-btns {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .trade-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .trade-btn.buy { background: var(--green); }
+  .trade-btn.sell { background: var(--accent); }
+  .trade-btn:disabled { opacity: .3; cursor: not-allowed; }
+  .shares-count {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .phase-banner {
+    text-align: center;
+    padding: 10px;
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+  .phase-trading { background: var(--green); color: #000; }
+  .phase-locked { background: var(--accent); }
+  .phase-lobby { background: var(--card); }
+  .phase-finished { background: #9c27b0; }
+
+  .student-dice {
+    margin-bottom: 16px;
+  }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    z-index: 100;
+    animation: fadeInOut 2s forwards;
+  }
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+    15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    85% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 480px) {
+    .view { padding: 10px; }
+    .asset-table td, .asset-table th { padding: 6px 4px; font-size: .85rem; }
+    .trade-btn { width: 32px; height: 32px; font-size: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ==================== LANDING VIEW ==================== -->
+<div id="landing" class="view">
+  <div>
+    <h2>Stock Market Game</h2>
+    <p>Learn about investing with dice and diversification!</p>
+  </div>
+
+  <div id="landing-buttons">
+    <button class="btn btn-primary" onclick="showCreateGame()" style="margin-right:10px">Create Game</button>
+    <button class="btn btn-secondary" onclick="showJoinGame()">Join Game</button>
+  </div>
+
+  <div id="join-form" class="join-form hidden">
+    <input id="join-code" class="code-input" placeholder="ROOM CODE" maxlength="4" autocomplete="off">
+    <input id="join-name" placeholder="Your Name" maxlength="20" autocomplete="off">
+    <button class="btn btn-primary" onclick="joinRoom()">Join</button>
+    <button class="btn btn-secondary btn-small" onclick="backToLanding()">Back</button>
+    <div id="join-error" class="error-msg"></div>
+  </div>
+
+  <div id="create-loading" class="hidden">
+    <p>Creating room...</p>
+  </div>
+</div>
+
+<!-- ==================== TEACHER VIEW ==================== -->
+<div id="teacher" class="view hidden">
+  <header>
+    <h1>Teacher Dashboard</h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="round-badge" id="t-round">Round 0</span>
+      <span class="room-badge" id="t-room-code">----</span>
+    </div>
+  </header>
+
+  <div style="padding:16px 0">
+    <div id="t-phase-banner" class="phase-banner phase-lobby">Lobby — Waiting for players</div>
+
+    <div class="teacher-controls" id="t-controls">
+      <button class="btn btn-green" id="t-btn-start" onclick="teacherStartTrading()">Start Round 1</button>
+      <button class="btn btn-primary hidden" id="t-btn-lock" onclick="teacherLockTrading()">Lock Trading</button>
+      <button class="btn btn-primary hidden" id="t-btn-roll" onclick="teacherRollDice()">Roll Dice</button>
+      <button class="btn btn-green hidden" id="t-btn-next" onclick="teacherNextRound()">Next Round</button>
+      <button class="btn btn-secondary btn-small" id="t-btn-end" onclick="teacherEndGame()">End Game</button>
+    </div>
+
+    <div id="t-dice-area" class="hidden">
+      <div id="t-cash-flow" class="cash-flow-card"></div>
+      <div id="t-dice-results" class="dice-results"></div>
+    </div>
+
+    <div class="leaderboard">
+      <h3>Leaderboard</h3>
+      <div id="t-leaderboard"></div>
+    </div>
+
+    <div class="player-details">
+      <h3>Player Portfolios</h3>
+      <div id="t-players"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== STUDENT VIEW ==================== -->
+<div id="student" class="view hidden">
+  <header>
+    <h1 id="s-name">Player</h1>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="round-badge" id="s-round">Round 0</span>
+      <span class="room-badge" id="s-room-code">----</span>
+    </div>
+  </header>
+
+  <div style="padding:16px 0">
+    <div id="s-phase-banner" class="phase-banner phase-lobby">Waiting for game to start...</div>
+
+    <div class="student-stats">
+      <div class="stat-box">
+        <div class="stat-label">Cash</div>
+        <div class="stat-value cash" id="s-cash">$1,000.00</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Net Worth</div>
+        <div class="stat-value" id="s-net-worth">$1,000.00</div>
+      </div>
+    </div>
+
+    <table class="asset-table" id="s-asset-table">
+      <thead>
+        <tr>
+          <th>Asset</th>
+          <th>Price</th>
+          <th>Shares</th>
+          <th>Trade</th>
+        </tr>
+      </thead>
+      <tbody id="s-asset-body"></tbody>
+    </table>
+
+    <div id="s-dice-area" class="student-dice hidden">
+      <div id="s-cash-flow" class="cash-flow-card"></div>
+      <div id="s-dice-results" class="dice-results"></div>
+    </div>
+
+    <div class="leaderboard">
+      <h3>Leaderboard</h3>
+      <div id="s-leaderboard"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+(function() {
+  const socket = io();
+
+  // --- State ---
+  let currentView = 'landing'; // landing | teacher | student
+  let gameState = null;
+  let myName = '';
+  let isTeacher = false;
+
+  // --- Helpers ---
+  const $ = id => document.getElementById(id);
+  const show = id => $(id).classList.remove('hidden');
+  const hide = id => $(id).classList.add('hidden');
+  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtPct = n => (n >= 0 ? '+' : '') + n + '%';
+
+  function switchView(view) {
+    ['landing', 'teacher', 'student'].forEach(v => {
+      $(v).classList.toggle('hidden', v !== view);
+    });
+    currentView = view;
+  }
+
+  function showToast(msg) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2200);
+  }
+
+  // --- Landing ---
+  window.showCreateGame = function() {
+    hide('landing-buttons');
+    show('create-loading');
+    socket.emit('create-room', (res) => {
+      if (res.ok) {
+        isTeacher = true;
+        gameState = res.room;
+        sessionStorage.setItem('role', 'teacher');
+        sessionStorage.setItem('roomCode', res.room.code);
+        switchView('teacher');
+        renderTeacher();
+      } else {
+        show('landing-buttons');
+        hide('create-loading');
+      }
+    });
+  };
+
+  window.showJoinGame = function() {
+    hide('landing-buttons');
+    show('join-form');
+    $('join-code').focus();
+  };
+
+  window.backToLanding = function() {
+    show('landing-buttons');
+    hide('join-form');
+    hide('create-loading');
+    $('join-error').textContent = '';
+  };
+
+  window.joinRoom = function() {
+    const code = $('join-code').value.trim().toUpperCase();
+    const name = $('join-name').value.trim();
+    $('join-error').textContent = '';
+
+    if (!code || code.length !== 4) {
+      $('join-error').textContent = 'Enter a 4-character room code.';
+      return;
+    }
+    if (!name) {
+      $('join-error').textContent = 'Enter your name.';
+      return;
+    }
+
+    socket.emit('join-room', { code, name }, (res) => {
+      if (res.ok) {
+        myName = res.playerName;
+        gameState = res.room;
+        isTeacher = false;
+        sessionStorage.setItem('role', 'student');
+        sessionStorage.setItem('roomCode', res.room.code);
+        sessionStorage.setItem('playerName', myName);
+        switchView('student');
+        renderStudent();
+      } else {
+        $('join-error').textContent = res.error;
+      }
+    });
+  };
+
+  // Enter key support for join form
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && currentView === 'landing' && !$('join-form').classList.contains('hidden')) {
+      joinRoom();
+    }
+  });
+
+  // --- Room Update Handler ---
+  socket.on('room-update', (state) => {
+    gameState = state;
+    if (isTeacher) renderTeacher();
+    else renderStudent();
+  });
+
+  socket.on('dice-rolled', (data) => {
+    // Dice animation is handled via room-update; this event can trigger extra effects
+  });
+
+  socket.on('room-expired', () => {
+    showToast('Room expired.');
+    switchView('landing');
+    show('landing-buttons');
+    hide('join-form');
+    hide('create-loading');
+  });
+
+  // --- Reconnect ---
+  socket.on('connect', () => {
+    const role = sessionStorage.getItem('role');
+    const code = sessionStorage.getItem('roomCode');
+    if (!code) return;
+
+    if (role === 'teacher') {
+      socket.emit('rejoin-teacher', { code }, (res) => {
+        if (res.ok) {
+          isTeacher = true;
+          gameState = res.room;
+          switchView('teacher');
+          renderTeacher();
+        }
+      });
+    } else if (role === 'student') {
+      const name = sessionStorage.getItem('playerName');
+      if (name) {
+        socket.emit('join-room', { code, name }, (res) => {
+          if (res.ok) {
+            myName = res.playerName;
+            gameState = res.room;
+            isTeacher = false;
+            switchView('student');
+            renderStudent();
+          }
+        });
+      }
+    }
+  });
+
+  // ==================== TEACHER RENDER ====================
+  function renderTeacher() {
+    const s = gameState;
+    $('t-room-code').textContent = s.code;
+    $('t-round').textContent = s.round === 0 ? 'Lobby' : `Round ${s.round} / ${s.maxRounds}`;
+
+    // Phase banner
+    const banner = $('t-phase-banner');
+    banner.className = 'phase-banner';
+    if (s.phase === 'lobby') {
+      banner.classList.add('phase-lobby');
+      banner.textContent = `Lobby — ${Object.keys(s.players).length} player(s) joined`;
+    } else if (s.phase === 'trading') {
+      banner.classList.add('phase-trading');
+      banner.textContent = 'Trading Open';
+    } else if (s.phase === 'rolling') {
+      banner.classList.add('phase-locked');
+      banner.textContent = s.diceResults ? 'Dice Rolled — Review Results' : 'Trading Locked — Ready to Roll';
+    } else if (s.phase === 'finished') {
+      banner.classList.add('phase-finished');
+      banner.textContent = 'Game Over!';
+    }
+
+    // Buttons
+    const btnStart = $('t-btn-start');
+    const btnLock = $('t-btn-lock');
+    const btnRoll = $('t-btn-roll');
+    const btnNext = $('t-btn-next');
+    const btnEnd = $('t-btn-end');
+
+    [btnStart, btnLock, btnRoll, btnNext].forEach(b => b.classList.add('hidden'));
+
+    if (s.phase === 'lobby') {
+      btnStart.classList.remove('hidden');
+      btnStart.textContent = 'Start Round 1';
+      btnStart.disabled = s.players.length === 0;
+    } else if (s.phase === 'trading') {
+      btnLock.classList.remove('hidden');
+    } else if (s.phase === 'rolling' && !s.diceResults) {
+      btnRoll.classList.remove('hidden');
+    } else if (s.phase === 'rolling' && s.diceResults) {
+      if (s.round >= s.maxRounds) {
+        btnEnd.textContent = 'Show Final Results';
+      } else {
+        btnNext.classList.remove('hidden');
+        btnNext.textContent = `Start Round ${s.round + 1}`;
+      }
+    }
+    btnEnd.classList.toggle('hidden', s.phase === 'finished');
+
+    // Dice results
+    if (s.diceResults) {
+      show('t-dice-area');
+      renderDiceResults('t-dice-results', 't-cash-flow', s.diceResults, s.cashFlowResult);
+    } else {
+      hide('t-dice-area');
+    }
+
+    // Leaderboard
+    renderLeaderboard('t-leaderboard', s.leaderboard);
+
+    // Player details
+    renderPlayerDetails(s);
+  }
+
+  // ==================== STUDENT RENDER ====================
+  function renderStudent() {
+    const s = gameState;
+    $('s-room-code').textContent = s.code;
+    $('s-name').textContent = myName;
+    $('s-round').textContent = s.round === 0 ? 'Lobby' : `Round ${s.round} / ${s.maxRounds}`;
+
+    // Find my player data
+    const me = s.players.find(p => p.name === myName);
+    if (me) {
+      $('s-cash').textContent = fmt(me.cash);
+      $('s-net-worth').textContent = fmt(me.netWorth);
+    }
+
+    // Phase banner
+    const banner = $('s-phase-banner');
+    banner.className = 'phase-banner';
+    if (s.phase === 'lobby') {
+      banner.classList.add('phase-lobby');
+      banner.textContent = 'Waiting for game to start...';
+    } else if (s.phase === 'trading') {
+      banner.classList.add('phase-trading');
+      banner.textContent = 'Trade Now!';
+    } else if (s.phase === 'rolling') {
+      banner.classList.add('phase-locked');
+      banner.textContent = 'Trading Locked';
+    } else if (s.phase === 'finished') {
+      banner.classList.add('phase-finished');
+      banner.textContent = 'Game Over!';
+    }
+
+    // Asset table
+    const tbody = $('s-asset-body');
+    tbody.innerHTML = '';
+    s.assets.forEach((asset, i) => {
+      const tr = document.createElement('tr');
+      const canBuy = s.phase === 'trading' && me && me.cash >= s.prices[i] && me.shares[i] < s.maxShares;
+      const canSell = s.phase === 'trading' && me && me.shares[i] > 0;
+      const myShares = me ? me.shares[i] : 0;
+
+      tr.innerHTML = `
+        <td><span class="asset-color" style="background:${asset.color}"></span>${asset.name}</td>
+        <td>${fmt(s.prices[i])}</td>
+        <td style="text-align:center">${myShares}</td>
+        <td>
+          <div class="trade-btns">
+            <button class="trade-btn sell" ${canSell ? '' : 'disabled'} data-action="sell" data-idx="${i}">-</button>
+            <span class="shares-count">${myShares}</span>
+            <button class="trade-btn buy" ${canBuy ? '' : 'disabled'} data-action="buy" data-idx="${i}">+</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    // Dice results
+    if (s.diceResults) {
+      show('s-dice-area');
+      renderDiceResults('s-dice-results', 's-cash-flow', s.diceResults, s.cashFlowResult);
+    } else {
+      hide('s-dice-area');
+    }
+
+    // Leaderboard
+    renderLeaderboard('s-leaderboard', s.leaderboard);
+  }
+
+  // --- Trade button handler (event delegation) ---
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const idx = parseInt(btn.dataset.idx);
+
+    btn.disabled = true;
+    socket.emit(action, { assetIndex: idx }, (res) => {
+      if (!res.ok) {
+        showToast(res.error || 'Trade failed');
+      }
+      // Re-enabled on next render via room-update
+    });
+  });
+
+  // ==================== SHARED RENDER HELPERS ====================
+  function renderLeaderboard(containerId, leaderboard) {
+    const container = $(containerId);
+    container.innerHTML = '';
+    leaderboard.forEach((entry, i) => {
+      const row = document.createElement('div');
+      row.className = 'lb-row' + (i < 3 ? ` rank-${i + 1}` : '');
+      row.innerHTML = `
+        <span class="lb-rank">${i + 1}</span>
+        <span class="lb-name ${entry.connected ? '' : 'disconnected'}">${entry.name}${entry.connected ? '' : ' (offline)'}</span>
+        <span class="lb-worth">${fmt(entry.netWorth)}</span>
+      `;
+      container.appendChild(row);
+    });
+    if (leaderboard.length === 0) {
+      container.innerHTML = '<div style="color:var(--muted);padding:8px">No players yet</div>';
+    }
+  }
+
+  function renderDiceResults(diceContainerId, cashFlowId, diceResults, cashFlowResult) {
+    const dc = $(diceContainerId);
+    dc.innerHTML = '';
+    diceResults.forEach(d => {
+      const card = document.createElement('div');
+      card.className = 'dice-card';
+      card.style.background = d.color;
+      card.innerHTML = `
+        <div class="asset-label">${d.asset}</div>
+        <div class="die-value">&#9856;${d.dieValue}</div>
+        <div class="return-pct">${fmtPct(d.returnPct)}</div>
+      `;
+      dc.appendChild(card);
+    });
+
+    const cf = $(cashFlowId);
+    const amt = cashFlowResult.amount;
+    cf.innerHTML = `Cash Flow Die: &#9856;${cashFlowResult.dieValue} &rarr; <strong>${amt >= 0 ? '+' : ''}${fmt(amt)}</strong>`;
+  }
+
+  function renderPlayerDetails(state) {
+    const container = $('t-players');
+    container.innerHTML = '';
+    state.players.forEach(player => {
+      const div = document.createElement('div');
+      div.className = 'player-expand';
+
+      const header = document.createElement('div');
+      header.className = 'player-expand-header';
+      header.innerHTML = `
+        <span>${player.name} ${player.connected ? '' : '(offline)'}</span>
+        <span>${fmt(player.netWorth)}</span>
+      `;
+
+      const body = document.createElement('div');
+      body.className = 'player-expand-body hidden';
+      let rows = '';
+      state.assets.forEach((asset, i) => {
+        const value = player.shares[i] * state.prices[i];
+        rows += `<tr>
+          <td><span class="asset-color" style="background:${asset.color}"></span>${asset.name}</td>
+          <td>${player.shares[i]}</td>
+          <td>${fmt(value)}</td>
+        </tr>`;
+      });
+      body.innerHTML = `
+        <table>
+          <tr><th>Asset</th><th>Shares</th><th>Value</th></tr>
+          ${rows}
+          <tr style="border-top:1px solid var(--card)"><td><strong>Cash</strong></td><td></td><td><strong>${fmt(player.cash)}</strong></td></tr>
+        </table>
+      `;
+
+      header.addEventListener('click', () => body.classList.toggle('hidden'));
+
+      div.appendChild(header);
+      div.appendChild(body);
+      container.appendChild(div);
+    });
+  }
+
+  // ==================== TEACHER ACTIONS ====================
+  window.teacherStartTrading = function() {
+    socket.emit('start-trading', (res) => {
+      if (!res.ok) showToast('Could not start round');
+    });
+  };
+
+  window.teacherLockTrading = function() {
+    socket.emit('lock-trading', (res) => {
+      if (!res.ok) showToast('Could not lock trading');
+    });
+  };
+
+  window.teacherRollDice = function() {
+    socket.emit('roll-dice', (res) => {
+      if (!res.ok) showToast('Could not roll dice');
+    });
+  };
+
+  window.teacherNextRound = function() {
+    socket.emit('next-round', (res) => {
+      if (!res.ok) showToast('Could not advance round');
+    });
+  };
+
+  window.teacherEndGame = function() {
+    if (confirm('End the game now?')) {
+      socket.emit('end-game', (res) => {
+        if (!res.ok) showToast('Could not end game');
+      });
+    }
+  };
+
+})();
+</script>
+</body>
+</html>
