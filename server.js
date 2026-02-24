@@ -11,11 +11,11 @@ app.use(express.static('public'));
 // --------------- Game Constants ---------------
 
 const ASSETS = [
-  { name: 'Money Market',    color: '#4caf50', returns: [0, 2, 3, 4, 5, 6] },
-  { name: 'Low Risk Bonds',  color: '#fdd835', returns: [-5, 0, 3, 6, 9, 12] },
-  { name: 'High Risk Bonds', color: '#ff9800', returns: [-10, -5, 5, 12, 15, 20] },
-  { name: 'Med Risk Stocks', color: '#e91e63', returns: [-20, -10, 0, 15, 25, 40] },
-  { name: 'High Risk Stocks',color: '#f44336', returns: [-30, -15, -5, 20, 35, 55] },
+  { name: 'Money Market',    color: '#34d399', returns: [0, 2, 3, 4, 5, 6] },
+  { name: 'Low Risk Bonds',  color: '#fbbf24', returns: [-5, 0, 3, 6, 9, 12] },
+  { name: 'High Risk Bonds', color: '#fb923c', returns: [-10, -5, 5, 12, 15, 20] },
+  { name: 'Med Risk Stocks', color: '#a78bfa', returns: [-20, -10, 0, 15, 25, 40] },
+  { name: 'High Risk Stocks',color: '#f87171', returns: [-30, -15, -5, 20, 35, 55] },
 ];
 
 const CASH_FLOW_VALUES = [-50, 0, 10, 25, 50, 75];
@@ -45,11 +45,13 @@ function rollDie() {
 
 function createRoom() {
   const code = generateRoomCode();
+  const startPrices = ASSETS.map(() => START_PRICE);
   rooms[code] = {
     code,
     phase: 'lobby', // lobby | trading | rolling | finished
     round: 0,
-    prices: ASSETS.map(() => START_PRICE),
+    prices: startPrices,
+    priceHistory: ASSETS.map(() => [START_PRICE]),
     players: {},     // socketId -> player
     diceResults: null,
     cashFlowResult: null,
@@ -98,6 +100,7 @@ function roomState(room) {
     phase: room.phase,
     round: room.round,
     prices: room.prices,
+    priceHistory: room.priceHistory,
     assets: ASSETS.map(a => ({ name: a.name, color: a.color })),
     leaderboard: buildLeaderboard(room),
     players: buildPlayerList(room),
@@ -229,6 +232,8 @@ io.on('connection', (socket) => {
 
     room.round++;
     room.phase = 'trading';
+    room.diceResults = null;
+    room.cashFlowResult = null;
     io.to(room.code).emit('room-update', roomState(room));
     callback({ ok: true });
   });
@@ -270,6 +275,7 @@ io.on('connection', (socket) => {
     for (let i = 0; i < ASSETS.length; i++) {
       const pct = ASSETS[i].returns[assetDice[i]];
       room.prices[i] = Math.round(room.prices[i] * (1 + pct / 100) * 100) / 100;
+      room.priceHistory[i].push(room.prices[i]);
     }
 
     // Apply cash flow to all players
@@ -297,6 +303,8 @@ io.on('connection', (socket) => {
     } else {
       room.round++;
       room.phase = 'trading';
+      room.diceResults = null;
+      room.cashFlowResult = null;
     }
 
     io.to(room.code).emit('room-update', roomState(room));
@@ -320,7 +328,6 @@ io.on('connection', (socket) => {
 
     if (socket.isTeacher) {
       // Teacher disconnect — keep room alive, they can reconnect as a new teacher
-      // (for simplicity, room persists until expiry)
     } else {
       const player = room.players[socket.id];
       if (player) {
