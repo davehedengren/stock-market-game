@@ -19,6 +19,10 @@ const ASSETS = [
 ];
 
 const CASH_FLOW_VALUES = [-50, 0, 10, 25, 50, 75];
+
+// Bustable asset indices (everything except Money Market at index 0)
+const BUSTABLE_ASSETS = [1, 2, 3, 4];
+
 const START_CASH = 1000;
 const START_PRICE = 100;
 const MAX_SHARES = 20;
@@ -27,10 +31,10 @@ const ROOM_EXPIRY_MS = 4 * 60 * 60 * 1000; // 4 hours
 
 // --------------- In-Memory State ---------------
 
-const rooms = {}; // roomCode -> room object
+const rooms = {};
 
 function generateRoomCode() {
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I/1/O/0 confusion
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let code;
   do {
     code = '';
@@ -45,16 +49,18 @@ function rollDie() {
 
 function createRoom() {
   const code = generateRoomCode();
-  const startPrices = ASSETS.map(() => START_PRICE);
   rooms[code] = {
     code,
-    phase: 'lobby', // lobby | trading | rolling | finished
+    phase: 'lobby',
     round: 0,
-    prices: startPrices,
+    prices: ASSETS.map(() => START_PRICE),
     priceHistory: ASSETS.map(() => [START_PRICE]),
-    players: {},     // socketId -> player
+    players: {},
     diceResults: null,
     cashFlowResult: null,
+    bustResult: null,
+    bustEvents: [],
+    netWorthHistory: {},
     teacherSocketId: null,
     createdAt: Date.now(),
   };
@@ -80,7 +86,13 @@ function netWorth(player, prices) {
 
 function buildLeaderboard(room) {
   return Object.values(room.players)
-    .map(p => ({ name: p.name, netWorth: netWorth(p, room.prices), cash: p.cash, connected: p.connected }))
+    .map(p => ({
+      name: p.name,
+      netWorth: netWorth(p, room.prices),
+      cash: p.cash,
+      shares: [...p.shares],
+      connected: p.connected,
+    }))
     .sort((a, b) => b.netWorth - a.netWorth);
 }
 
@@ -92,6 +104,89 @@ function buildPlayerList(room) {
     netWorth: netWorth(p, room.prices),
     connected: p.connected,
   }));
+}
+
+function recordNetWorth(room) {
+  for (const player of Object.values(room.players)) {
+    const name = player.name;
+    if (!room.netWorthHistory[name]) {
+      room.netWorthHistory[name] = [START_CASH];
+    }
+    // Pad with nulls if player joined late
+    while (room.netWorthHistory[name].length < room.round) {
+      room.netWorthHistory[name].push(null);
+    }
+    room.netWorthHistory[name].push(netWorth(player, room.prices));
+  }
+}
+
+function recoverBustedAssets(room) {
+  if (room.bustResult) {
+    const idx = room.bustResult.assetIndex;
+    room.prices[idx] = START_PRICE;
+    // Don't push to priceHistory here — next roll will record naturally
+    room.bustResult = null;
+  }
+}
+
+function applyDice(room, assetDiceIndices, cashFlowDieIdx, bustAssetIdx) {
+  // assetDiceIndices: array of 5 values, each 0-5
+  // cashFlowDieIdx: 0-5
+  // bustAssetIdx: 1-4 (which asset busts) or null
+
+  // Store dice results for display
+  room.diceResults = assetDiceIndices.map((dieIdx, i) => ({
+    asset: ASSETS[i].name,
+    color: ASSETS[i].color,
+    dieValue: dieIdx + 1,
+    returnPct: ASSETS[i].returns[dieIdx],
+  }));
+  room.cashFlowResult = {
+    dieValue: cashFlowDieIdx + 1,
+    amount: CASH_FLOW_VALUES[cashFlowDieIdx],
+  };
+
+  // Update prices
+  for (let i = 0; i < ASSETS.length; i++) {
+    const pct = ASSETS[i].returns[assetDiceIndices[i]];
+    room.prices[i] = Math.round(room.prices[i] * (1 + pct / 100) * 100) / 100;
+    room.priceHistory[i].push(room.prices[i]);
+  }
+
+  // Apply cash flow to all players
+  const cashFlowAmount = CASH_FLOW_VALUES[cashFlowDieIdx];
+  for (const player of Object.values(room.players)) {
+    player.cash = Math.round((player.cash + cashFlowAmount) * 100) / 100;
+  }
+
+  // Bust die on even rounds
+  if (room.round % 2 === 0 && bustAssetIdx !== null && bustAssetIdx !== undefined) {
+    // Collapse price to 0, overwrite the price we just recorded
+    room.prices[bustAssetIdx] = 0;
+    room.priceHistory[bustAssetIdx][room.priceHistory[bustAssetIdx].length - 1] = 0;
+
+    // Wipe all player shares in that asset
+    for (const player of Object.values(room.players)) {
+      player.shares[bustAssetIdx] = 0;
+    }
+
+    room.bustResult = {
+      assetIndex: bustAssetIdx,
+      asset: ASSETS[bustAssetIdx].name,
+      color: ASSETS[bustAssetIdx].color,
+    };
+
+    room.bustEvents.push({
+      round: room.round,
+      assetIndex: bustAssetIdx,
+      assetName: ASSETS[bustAssetIdx].name,
+    });
+  } else {
+    room.bustResult = null;
+  }
+
+  // Snapshot net worth for all players
+  recordNetWorth(room);
 }
 
 function roomState(room) {
@@ -106,6 +201,9 @@ function roomState(room) {
     players: buildPlayerList(room),
     diceResults: room.diceResults,
     cashFlowResult: room.cashFlowResult,
+    bustResult: room.bustResult,
+    bustEvents: room.bustEvents,
+    netWorthHistory: room.netWorthHistory,
     maxShares: MAX_SHARES,
     maxRounds: MAX_ROUNDS,
   };
@@ -153,7 +251,6 @@ io.on('connection', (socket) => {
       return callback({ ok: false, error: 'Game is already over.' });
     }
 
-    // Reconnection: if a player with same name exists and is disconnected, reclaim
     let existingId = null;
     for (const [sid, p] of Object.entries(room.players)) {
       if (p.name.toLowerCase() === name.toLowerCase() && !p.connected) {
@@ -168,21 +265,24 @@ io.on('connection', (socket) => {
       player.connected = true;
       room.players[socket.id] = player;
     } else {
-      // Check for duplicate name among connected players
       const taken = Object.values(room.players).some(
         p => p.name.toLowerCase() === name.toLowerCase()
       );
       if (taken) {
         return callback({ ok: false, error: 'Name already taken in this room.' });
       }
-      room.players[socket.id] = createPlayer(name);
+      const player = createPlayer(name);
+      room.players[socket.id] = player;
+      // Initialize net worth history for new player
+      if (!room.netWorthHistory[name]) {
+        room.netWorthHistory[name] = [START_CASH];
+      }
     }
 
     socket.join(code);
     socket.roomCode = code;
     socket.isTeacher = false;
 
-    // Notify teacher + all players
     io.to(code).emit('room-update', roomState(room));
     callback({ ok: true, room: roomState(room), playerName: room.players[socket.id].name });
   });
@@ -224,12 +324,13 @@ io.on('connection', (socket) => {
     callback({ ok: true });
   });
 
-  // --- Teacher: Start Trading (begin round) ---
+  // --- Teacher: Start Trading ---
   socket.on('start-trading', (callback) => {
     const room = rooms[socket.roomCode];
     if (!room || !socket.isTeacher) return callback({ ok: false });
     if (room.phase !== 'lobby' && room.phase !== 'rolling') return callback({ ok: false });
 
+    recoverBustedAssets(room);
     room.round++;
     room.phase = 'trading';
     room.diceResults = null;
@@ -249,50 +350,73 @@ io.on('connection', (socket) => {
     callback({ ok: true });
   });
 
-  // --- Teacher: Roll Dice ---
+  // --- Teacher: Roll Dice (auto) ---
   socket.on('roll-dice', (callback) => {
     const room = rooms[socket.roomCode];
     if (!room || !socket.isTeacher) return callback({ ok: false });
     if (room.phase !== 'rolling') return callback({ ok: false });
 
-    // Roll asset dice
     const assetDice = ASSETS.map(() => rollDie());
     const cashFlowDie = rollDie();
+    const bustTarget = (room.round % 2 === 0)
+      ? BUSTABLE_ASSETS[Math.floor(Math.random() * BUSTABLE_ASSETS.length)]
+      : null;
 
-    // Store results for display
-    room.diceResults = assetDice.map((dieIdx, i) => ({
-      asset: ASSETS[i].name,
-      color: ASSETS[i].color,
-      dieValue: dieIdx + 1,
-      returnPct: ASSETS[i].returns[dieIdx],
-    }));
-    room.cashFlowResult = {
-      dieValue: cashFlowDie + 1,
-      amount: CASH_FLOW_VALUES[cashFlowDie],
-    };
-
-    // Update prices
-    for (let i = 0; i < ASSETS.length; i++) {
-      const pct = ASSETS[i].returns[assetDice[i]];
-      room.prices[i] = Math.round(room.prices[i] * (1 + pct / 100) * 100) / 100;
-      room.priceHistory[i].push(room.prices[i]);
-    }
-
-    // Apply cash flow to all players
-    const cashFlowAmount = CASH_FLOW_VALUES[cashFlowDie];
-    for (const player of Object.values(room.players)) {
-      player.cash = Math.round((player.cash + cashFlowAmount) * 100) / 100;
-    }
+    applyDice(room, assetDice, cashFlowDie, bustTarget);
 
     io.to(room.code).emit('room-update', roomState(room));
     io.to(room.code).emit('dice-rolled', {
       diceResults: room.diceResults,
       cashFlowResult: room.cashFlowResult,
+      bustResult: room.bustResult,
     });
     callback({ ok: true });
   });
 
-  // --- Teacher: Next Round (open trading again) ---
+  // --- Teacher: Submit Manual Dice ---
+  socket.on('submit-manual-dice', ({ assetDice, cashFlowDie, bustDie }, callback) => {
+    const room = rooms[socket.roomCode];
+    if (!room || !socket.isTeacher) return callback({ ok: false });
+    if (room.phase !== 'rolling') return callback({ ok: false });
+
+    // Validate: values are 1-6 (user-facing), convert to 0-5 (internal)
+    if (!Array.isArray(assetDice) || assetDice.length !== ASSETS.length) {
+      return callback({ ok: false, error: 'Need exactly 5 asset dice values.' });
+    }
+    for (const v of assetDice) {
+      if (typeof v !== 'number' || v < 1 || v > 6) {
+        return callback({ ok: false, error: 'Dice values must be 1-6.' });
+      }
+    }
+    if (typeof cashFlowDie !== 'number' || cashFlowDie < 1 || cashFlowDie > 6) {
+      return callback({ ok: false, error: 'Cash flow die must be 1-6.' });
+    }
+
+    const assetDiceIdx = assetDice.map(v => v - 1);
+    const cashFlowDieIdx = cashFlowDie - 1;
+
+    let bustTarget = null;
+    if (room.round % 2 === 0) {
+      // bustDie: 1-4 = asset index to bust, or auto-pick if not provided
+      if (typeof bustDie === 'number' && bustDie >= 1 && bustDie <= 4) {
+        bustTarget = bustDie;
+      } else {
+        bustTarget = BUSTABLE_ASSETS[Math.floor(Math.random() * BUSTABLE_ASSETS.length)];
+      }
+    }
+
+    applyDice(room, assetDiceIdx, cashFlowDieIdx, bustTarget);
+
+    io.to(room.code).emit('room-update', roomState(room));
+    io.to(room.code).emit('dice-rolled', {
+      diceResults: room.diceResults,
+      cashFlowResult: room.cashFlowResult,
+      bustResult: room.bustResult,
+    });
+    callback({ ok: true });
+  });
+
+  // --- Teacher: Next Round ---
   socket.on('next-round', (callback) => {
     const room = rooms[socket.roomCode];
     if (!room || !socket.isTeacher) return callback({ ok: false });
@@ -301,6 +425,7 @@ io.on('connection', (socket) => {
     if (room.round >= MAX_ROUNDS) {
       room.phase = 'finished';
     } else {
+      recoverBustedAssets(room);
       room.round++;
       room.phase = 'trading';
       room.diceResults = null;
@@ -327,7 +452,7 @@ io.on('connection', (socket) => {
     if (!room) return;
 
     if (socket.isTeacher) {
-      // Teacher disconnect — keep room alive, they can reconnect as a new teacher
+      // Keep room alive for reconnect
     } else {
       const player = room.players[socket.id];
       if (player) {
