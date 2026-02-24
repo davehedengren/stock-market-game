@@ -282,6 +282,17 @@
 
   .empty-state { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 0.85rem; }
 
+  /* ---------- QR Code ---------- */
+  .qr-section {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    padding: 28px 24px; margin-bottom: 20px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    text-align: center;
+  }
+  .qr-title { font-weight: 700; font-size: 1.1rem; }
+  .qr-img img { border-radius: 8px; image-rendering: pixelated; width: 200px; height: 200px; }
+  .qr-url { font-size: 0.75rem; color: var(--text-muted); word-break: break-all; max-width: 320px; }
+
   /* ---------- Confetti ---------- */
   .confetti-piece { position: fixed; width: 8px; height: 12px; border-radius: 2px; z-index: 200; pointer-events: none; animation: confetti-fall linear forwards; }
   @keyframes confetti-fall { 0% { opacity: 1; transform: translateY(0) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
@@ -346,6 +357,13 @@
   </div>
   <div class="view" style="flex:1">
     <div id="t-phase-banner" class="phase-banner phase-lobby"><span class="phase-dot"></span><span>Lobby — Waiting for players</span></div>
+
+    <div id="t-qr-section" class="qr-section hidden">
+      <div class="qr-title">Scan to Join</div>
+      <div class="qr-img" id="t-qr-img"></div>
+      <div>Room Code: <span class="room-code" style="font-size:1.2rem;padding:8px 16px" id="t-qr-code">----</span></div>
+      <div class="qr-url" id="t-qr-url"></div>
+    </div>
 
     <div class="controls-row" id="t-controls">
       <button class="btn btn-green" id="t-btn-start" onclick="teacherStartTrading()">Start Round 1</button>
@@ -454,6 +472,7 @@
 
 <!-- ==================== SCRIPTS ==================== -->
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <script>
 (function() {
   const socket = io();
@@ -693,6 +712,24 @@
     else if (s.phase === 'trading') { banner.classList.add('phase-trading'); banner.innerHTML = '<span class="phase-dot"></span><span>Trading Open</span>'; }
     else if (s.phase === 'rolling') { banner.classList.add('phase-locked'); const msg = s.diceResults ? 'Dice Rolled — Review Results' : 'Trading Locked — Ready to Roll'; banner.innerHTML = `<span class="phase-dot"></span><span>${msg}</span>`; }
     else if (s.phase === 'finished') { banner.classList.add('phase-finished'); banner.innerHTML = '<span class="phase-dot"></span><span>Game Over</span>'; }
+
+    // QR code (lobby only)
+    if (s.phase === 'lobby' && typeof qrcode === 'function') {
+      show('t-qr-section');
+      const joinUrl = window.location.origin + '/?code=' + s.code;
+      $('t-qr-code').textContent = s.code;
+      $('t-qr-url').textContent = joinUrl;
+      const qrImg = $('t-qr-img');
+      if (qrImg.dataset.url !== joinUrl) {
+        const qr = qrcode(0, 'M');
+        qr.addData(joinUrl);
+        qr.make();
+        qrImg.innerHTML = '<img src="' + qr.createDataURL(6, 8) + '" alt="QR code to join game">';
+        qrImg.dataset.url = joinUrl;
+      }
+    } else {
+      hide('t-qr-section');
+    }
 
     // Buttons
     const btnStart = $('t-btn-start'), btnLock = $('t-btn-lock'), btnRoll = $('t-btn-roll'), btnNext = $('t-btn-next'), btnEnd = $('t-btn-end');
@@ -1000,6 +1037,19 @@
       }, i * 30);
     }
   }
+
+  // ==================== URL PARAMETER AUTO-JOIN ====================
+
+  (function() {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code && !sessionStorage.getItem('role')) {
+      hide('landing-buttons');
+      show('join-form');
+      $('join-code').value = code.toUpperCase().slice(0, 4);
+      $('join-name').focus();
+    }
+  })();
 
 })();
 </script>
