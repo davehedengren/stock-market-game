@@ -20,9 +20,8 @@ const ASSETS = [
 
 const CASH_FLOW_VALUES = [-50, 0, 10, 25, 50, 75];
 
-// Bust die: d6 face (0-indexed) -> which asset index busts
-// Faces 1-2 = bonds (1/6 each), faces 3-6 = stocks (2/6 each = higher bust risk)
-const BUST_DIE_MAP = [1, 2, 3, 4, 3, 4];
+// Bustable asset indices (everything except Money Market at index 0)
+const BUSTABLE_ASSETS = [1, 2, 3, 4];
 
 const START_CASH = 1000;
 const START_PRICE = 100;
@@ -130,10 +129,10 @@ function recoverBustedAssets(room) {
   }
 }
 
-function applyDice(room, assetDiceIndices, cashFlowDieIdx, bustDieIdx) {
+function applyDice(room, assetDiceIndices, cashFlowDieIdx, bustAssetIdx) {
   // assetDiceIndices: array of 5 values, each 0-5
   // cashFlowDieIdx: 0-5
-  // bustDieIdx: 0-5 or null
+  // bustAssetIdx: 1-4 (which asset busts) or null
 
   // Store dice results for display
   room.diceResults = assetDiceIndices.map((dieIdx, i) => ({
@@ -161,9 +160,7 @@ function applyDice(room, assetDiceIndices, cashFlowDieIdx, bustDieIdx) {
   }
 
   // Bust die on even rounds
-  if (room.round % 2 === 0 && bustDieIdx !== null && bustDieIdx !== undefined) {
-    const bustAssetIdx = BUST_DIE_MAP[bustDieIdx];
-
+  if (room.round % 2 === 0 && bustAssetIdx !== null && bustAssetIdx !== undefined) {
     // Collapse price to 0, overwrite the price we just recorded
     room.prices[bustAssetIdx] = 0;
     room.priceHistory[bustAssetIdx][room.priceHistory[bustAssetIdx].length - 1] = 0;
@@ -177,7 +174,6 @@ function applyDice(room, assetDiceIndices, cashFlowDieIdx, bustDieIdx) {
       assetIndex: bustAssetIdx,
       asset: ASSETS[bustAssetIdx].name,
       color: ASSETS[bustAssetIdx].color,
-      dieValue: bustDieIdx + 1,
     };
 
     room.bustEvents.push({
@@ -362,9 +358,11 @@ io.on('connection', (socket) => {
 
     const assetDice = ASSETS.map(() => rollDie());
     const cashFlowDie = rollDie();
-    const bustDie = (room.round % 2 === 0) ? rollDie() : null;
+    const bustTarget = (room.round % 2 === 0)
+      ? BUSTABLE_ASSETS[Math.floor(Math.random() * BUSTABLE_ASSETS.length)]
+      : null;
 
-    applyDice(room, assetDice, cashFlowDie, bustDie);
+    applyDice(room, assetDice, cashFlowDie, bustTarget);
 
     io.to(room.code).emit('room-update', roomState(room));
     io.to(room.code).emit('dice-rolled', {
@@ -397,16 +395,17 @@ io.on('connection', (socket) => {
     const assetDiceIdx = assetDice.map(v => v - 1);
     const cashFlowDieIdx = cashFlowDie - 1;
 
-    let bustDieIdx = null;
+    let bustTarget = null;
     if (room.round % 2 === 0) {
-      if (typeof bustDie === 'number' && bustDie >= 1 && bustDie <= 6) {
-        bustDieIdx = bustDie - 1;
+      // bustDie: 1-4 = asset index to bust, or auto-pick if not provided
+      if (typeof bustDie === 'number' && bustDie >= 1 && bustDie <= 4) {
+        bustTarget = bustDie;
       } else {
-        bustDieIdx = rollDie(); // auto-roll if not provided
+        bustTarget = BUSTABLE_ASSETS[Math.floor(Math.random() * BUSTABLE_ASSETS.length)];
       }
     }
 
-    applyDice(room, assetDiceIdx, cashFlowDieIdx, bustDieIdx);
+    applyDice(room, assetDiceIdx, cashFlowDieIdx, bustTarget);
 
     io.to(room.code).emit('room-update', roomState(room));
     io.to(room.code).emit('dice-rolled', {
