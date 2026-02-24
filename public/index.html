@@ -31,7 +31,6 @@
     --radius: 12px;
     --radius-sm: 8px;
     --radius-lg: 16px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.2);
     --shadow-lg: 0 4px 30px rgba(0,0,0,0.4);
     --transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -51,246 +50,78 @@
 
   /* ---------- Shared Components ---------- */
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    font-family: inherit;
-    border: 1px solid transparent;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    color: #fff;
-    transition: all var(--transition);
-    letter-spacing: -0.01em;
-    white-space: nowrap;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 20px; font-size: 0.875rem; font-weight: 600; font-family: inherit;
+    border: 1px solid transparent; border-radius: var(--radius-sm);
+    cursor: pointer; color: #fff; transition: all var(--transition);
+    letter-spacing: -0.01em; white-space: nowrap;
   }
   .btn:hover { transform: translateY(-1px); }
   .btn:active { transform: translateY(0); }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-  .btn-primary {
-    background: var(--accent);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 20px var(--accent-glow);
-  }
+  .btn-primary { background: var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 20px var(--accent-glow); }
   .btn-primary:hover { background: #5558e6; }
-  .btn-secondary {
-    background: var(--surface-2);
-    border-color: var(--border);
-  }
+  .btn-secondary { background: var(--surface-2); border-color: var(--border); }
   .btn-secondary:hover { border-color: var(--border-hover); background: var(--surface-3); }
-  .btn-green {
-    background: #059669;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 20px rgba(5,150,105,0.15);
-  }
+  .btn-green { background: #059669; box-shadow: 0 1px 2px rgba(0,0,0,0.2), 0 0 20px rgba(5,150,105,0.15); }
   .btn-green:hover { background: #047857; }
-  .btn-danger {
-    background: transparent;
-    border-color: var(--border);
-    color: var(--text-secondary);
-  }
+  .btn-danger { background: transparent; border-color: var(--border); color: var(--text-secondary); }
   .btn-danger:hover { border-color: rgba(248,113,113,0.3); color: var(--red); background: var(--red-dim); }
   .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
   .btn-lg { padding: 14px 28px; font-size: 1rem; }
-  .btn-icon {
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border-radius: var(--radius-sm);
-    font-size: 1.1rem;
-  }
 
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
   .card-header {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
   }
-  .card-header h3 {
-    font-size: 0.8rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-  }
+  .card-header h3 { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
   .card-body { padding: 18px; }
 
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 4px 10px;
-    border-radius: 100px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
+  .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 100px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; }
   .badge-accent { background: var(--accent-glow); color: var(--accent-2); }
   .badge-green { background: var(--green-dim); color: var(--green); }
   .badge-red { background: var(--red-dim); color: var(--red); }
   .badge-muted { background: rgba(255,255,255,0.06); color: var(--text-secondary); }
 
   .input {
-    width: 100%;
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 0.95rem;
-    font-family: inherit;
-    transition: border-color var(--transition);
-    outline: none;
+    width: 100%; padding: 12px 16px; border-radius: var(--radius-sm);
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    font-size: 0.95rem; font-family: inherit; transition: border-color var(--transition); outline: none;
   }
   .input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
   .input::placeholder { color: var(--text-muted); }
 
-  /* ---------- Layout ---------- */
-  .view {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 20px;
-  }
+  select.input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
 
+  /* ---------- Layout ---------- */
+  .view { flex: 1; display: flex; flex-direction: column; width: 100%; max-width: 960px; margin: 0 auto; padding: 20px; }
   .topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   }
   .topbar-left { display: flex; align-items: center; gap: 12px; }
   .topbar-right { display: flex; align-items: center; gap: 8px; }
-  .topbar-title {
-    font-size: 0.9rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-  }
-
-  .room-code {
-    font-family: 'Inter', monospace;
-    font-weight: 800;
-    font-size: 0.85rem;
-    letter-spacing: 0.15em;
-    background: var(--accent);
-    color: #fff;
-    padding: 5px 12px;
-    border-radius: 6px;
-  }
+  .topbar-title { font-size: 0.9rem; font-weight: 700; letter-spacing: -0.02em; }
+  .room-code { font-family: 'Inter', monospace; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.15em; background: var(--accent); color: #fff; padding: 5px 12px; border-radius: 6px; }
 
   /* ---------- Landing ---------- */
-  #landing {
-    justify-content: center;
-    align-items: center;
-    gap: 0;
-    text-align: center;
-    min-height: 100dvh;
-    padding: 40px 20px;
-    position: relative;
-    overflow: hidden;
-  }
-  .landing-glow {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -60%);
-    pointer-events: none;
-    opacity: 0.6;
-  }
+  #landing { justify-content: center; align-items: center; text-align: center; min-height: 100dvh; padding: 40px 20px; position: relative; overflow: hidden; }
+  .landing-glow { position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -60%); pointer-events: none; opacity: 0.6; }
   .landing-content { position: relative; z-index: 1; }
-  .landing-icon {
-    width: 64px;
-    height: 64px;
-    background: var(--accent-glow);
-    border: 1px solid rgba(99,102,241,0.2);
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    font-size: 1.8rem;
-  }
-  .landing-title {
-    font-size: 2.5rem;
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1.1;
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, #fff 0%, var(--text-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .landing-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    line-height: 1.5;
-    margin-bottom: 40px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .landing-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .join-section {
-    margin-top: 48px;
-    width: 100%;
-    max-width: 340px;
-  }
+  .landing-icon { width: 64px; height: 64px; background: var(--accent-glow); border: 1px solid rgba(99,102,241,0.2); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+  .landing-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 12px; background: linear-gradient(135deg, #fff 0%, var(--text-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .landing-subtitle { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.5; margin-bottom: 40px; max-width: 400px; margin-left: auto; margin-right: auto; }
+  .landing-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .join-section { margin-top: 48px; width: 100%; max-width: 340px; }
   .join-section .input { margin-bottom: 10px; }
-  .join-section .input.code-input {
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-align: center;
-  }
+  .join-section .input.code-input { text-transform: uppercase; letter-spacing: 0.2em; font-weight: 700; font-size: 1.2rem; text-align: center; }
   .error-msg { color: var(--red); font-size: 0.82rem; margin-top: 8px; min-height: 1.2em; }
 
   /* ---------- Phase Banner ---------- */
-  .phase-banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    margin-bottom: 20px;
-  }
-  .phase-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  .phase-banner { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 20px; }
+  .phase-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .phase-lobby { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-secondary); }
   .phase-lobby .phase-dot { background: var(--text-muted); }
   .phase-trading { background: var(--green-dim); border: 1px solid rgba(52,211,153,0.2); color: var(--green); }
@@ -299,411 +130,169 @@
   .phase-locked .phase-dot { background: var(--red); }
   .phase-finished { background: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.2); color: #c084fc; }
   .phase-finished .phase-dot { background: #c084fc; }
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
+  @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  /* ---------- Teacher Controls ---------- */
-  .controls-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
+  /* ---------- Controls ---------- */
+  .controls-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
 
-  /* ---------- Grid Layout ---------- */
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  .grid-3 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-  .span-2 { grid-column: span 2; }
+  /* ---------- Grid ---------- */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .section { margin-bottom: 20px; }
 
   /* ---------- Stat Cards ---------- */
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 18px;
-  }
-  .stat-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-  .stat-value {
-    font-size: 1.5rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-  }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+  .stat-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 6px; }
+  .stat-value { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
   .stat-value.green { color: var(--green); }
   .stat-value.white { color: var(--text); }
-  .stat-change {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-top: 4px;
-  }
-  .stat-change.up { color: var(--green); }
-  .stat-change.down { color: var(--red); }
 
   /* ---------- Dice Animation ---------- */
-  .dice-stage {
-    perspective: 800px;
-    margin-bottom: 20px;
-  }
-  .dice-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-  }
-  .dice-slot {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-  .dice-slot-label {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-muted);
-  }
-  .dice-slot-result {
-    font-size: 0.85rem;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 100px;
-  }
-
-  /* 3D Dice */
-  .dice-wrap {
-    width: 56px;
-    height: 56px;
-    perspective: 400px;
-  }
-  .dice-cube {
-    width: 56px;
-    height: 56px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.1s;
-  }
-  .dice-cube.rolling {
-    animation: dice-tumble 1.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
-  }
-  .dice-face {
-    position: absolute;
-    width: 56px;
-    height: 56px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 1.5rem;
-    color: #fff;
-    backface-visibility: hidden;
-    border: 2px solid rgba(255,255,255,0.15);
-  }
+  .dice-stage { perspective: 800px; margin-bottom: 20px; }
+  .dice-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+  .dice-slot { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .dice-slot-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); }
+  .dice-slot-result { font-size: 0.85rem; font-weight: 700; padding: 3px 10px; border-radius: 100px; }
+  .dice-wrap { width: 56px; height: 56px; perspective: 400px; }
+  .dice-cube { width: 56px; height: 56px; position: relative; transform-style: preserve-3d; transition: transform 0.1s; }
+  .dice-cube.rolling { animation: dice-tumble 1.8s cubic-bezier(0.2, 0.8, 0.3, 1) forwards; }
+  .dice-face { position: absolute; width: 56px; height: 56px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.5rem; color: #fff; backface-visibility: hidden; border: 2px solid rgba(255,255,255,0.15); }
   .dice-face-1 { transform: rotateY(0deg)   translateZ(28px); }
   .dice-face-2 { transform: rotateY(90deg)  translateZ(28px); }
   .dice-face-3 { transform: rotateY(180deg) translateZ(28px); }
   .dice-face-4 { transform: rotateY(-90deg) translateZ(28px); }
   .dice-face-5 { transform: rotateX(90deg)  translateZ(28px); }
   .dice-face-6 { transform: rotateX(-90deg) translateZ(28px); }
-
-  /* Pip layout for dice faces */
-  .pips {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 2px;
-    width: 36px;
-    height: 36px;
-  }
-  .pip {
-    width: 8px;
-    height: 8px;
-    background: #fff;
-    border-radius: 50%;
-    align-self: center;
-    justify-self: center;
-    opacity: 0;
-  }
+  .pips { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 2px; width: 36px; height: 36px; }
+  .pip { width: 8px; height: 8px; background: #fff; border-radius: 50%; align-self: center; justify-self: center; opacity: 0; }
   .pip.on { opacity: 1; }
-
   @keyframes dice-tumble {
-    0%   { transform: rotateX(0)      rotateY(0)      rotateZ(0); }
-    20%  { transform: rotateX(450deg)  rotateY(180deg) rotateZ(90deg); }
-    40%  { transform: rotateX(720deg)  rotateY(540deg) rotateZ(180deg); }
+    0%   { transform: rotateX(0) rotateY(0) rotateZ(0); }
+    20%  { transform: rotateX(450deg) rotateY(180deg) rotateZ(90deg); }
+    40%  { transform: rotateX(720deg) rotateY(540deg) rotateZ(180deg); }
     60%  { transform: rotateX(1080deg) rotateY(720deg) rotateZ(270deg); }
     80%  { transform: rotateX(1260deg) rotateY(900deg) rotateZ(340deg); }
     100% { transform: var(--final-rotation); }
   }
 
-  /* Cash Flow Card */
-  .cash-flow-banner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 14px 20px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 20px;
-  }
+  /* Cash Flow Banner */
+  .cash-flow-banner { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 14px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; }
   .cash-flow-banner .dice-wrap { width: 40px; height: 40px; }
   .cash-flow-banner .dice-cube { width: 40px; height: 40px; }
-  .cash-flow-banner .dice-face {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-    border-radius: 8px;
-  }
+  .cash-flow-banner .dice-face { width: 40px; height: 40px; font-size: 1.1rem; border-radius: 8px; }
   .cash-flow-banner .dice-face-1 { transform: rotateY(0deg)   translateZ(20px); }
   .cash-flow-banner .dice-face-2 { transform: rotateY(90deg)  translateZ(20px); }
   .cash-flow-banner .dice-face-3 { transform: rotateY(180deg) translateZ(20px); }
   .cash-flow-banner .dice-face-4 { transform: rotateY(-90deg) translateZ(20px); }
   .cash-flow-banner .dice-face-5 { transform: rotateX(90deg)  translateZ(20px); }
   .cash-flow-banner .dice-face-6 { transform: rotateX(-90deg) translateZ(20px); }
-  .cash-flow-label {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-weight: 500;
+  .cash-flow-label { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; }
+  .cash-flow-amount { font-size: 1.1rem; font-weight: 800; }
+
+  /* ---------- Bust Banner ---------- */
+  .bust-banner {
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 16px 20px; border-radius: var(--radius); margin-bottom: 12px;
+    background: linear-gradient(135deg, rgba(220,38,38,0.15), rgba(220,38,38,0.05));
+    border: 1px solid rgba(220,38,38,0.3);
+    animation: bust-flash 0.6s ease-out;
   }
-  .cash-flow-amount {
-    font-size: 1.1rem;
-    font-weight: 800;
+  .bust-banner .bust-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--red); }
+  .bust-banner .bust-asset { font-size: 1rem; font-weight: 800; color: var(--text); }
+  .bust-banner .bust-sub { font-size: 0.8rem; color: var(--text-secondary); }
+  @keyframes bust-flash {
+    0% { opacity: 0; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1.02); }
+    100% { transform: scale(1); }
   }
 
+  /* ---------- Manual Dice ---------- */
+  .manual-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 20px; }
+  .manual-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .manual-field label { display: block; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 4px; }
+  .manual-field select { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font-family: inherit; font-size: 0.9rem; outline: none; }
+  .manual-field select:focus { border-color: var(--accent); }
+  .manual-toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.8rem; color: var(--text-secondary); user-select: none; }
+  .manual-toggle input { display: none; }
+  .toggle-track { width: 36px; height: 20px; border-radius: 10px; background: var(--surface-3); border: 1px solid var(--border); position: relative; transition: background var(--transition); }
+  .toggle-track::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--text-muted); top: 2px; left: 2px; transition: all var(--transition); }
+  .manual-toggle input:checked + .toggle-track { background: var(--accent); border-color: var(--accent); }
+  .manual-toggle input:checked + .toggle-track::after { left: 18px; background: #fff; }
+
   /* ---------- Leaderboard ---------- */
-  .lb-row {
-    display: flex;
-    align-items: center;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border);
-    transition: background var(--transition);
-  }
+  .lb-row { display: flex; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border); transition: background var(--transition); }
   .lb-row:last-child { border-bottom: none; }
   .lb-row:hover { background: rgba(255,255,255,0.02); }
-  .lb-rank {
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.75rem;
-    border-radius: 8px;
-    flex-shrink: 0;
-    background: var(--surface-2);
-    color: var(--text-muted);
-  }
+  .lb-rank { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem; border-radius: 8px; flex-shrink: 0; background: var(--surface-2); color: var(--text-muted); }
   .lb-row.rank-1 .lb-rank { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; }
   .lb-row.rank-2 .lb-rank { background: linear-gradient(135deg, #d1d5db, #9ca3af); color: #000; }
   .lb-row.rank-3 .lb-rank { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; }
-  .lb-name {
-    flex: 1;
-    margin-left: 12px;
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
+  .lb-info { flex: 1; margin-left: 12px; min-width: 0; }
+  .lb-name { font-weight: 500; font-size: 0.9rem; }
   .lb-name.disconnected { opacity: 0.4; }
-  .lb-worth {
-    font-weight: 700;
-    font-size: 0.9rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--green);
-  }
+  .lb-alloc { display: flex; gap: 3px; margin-top: 4px; height: 6px; border-radius: 3px; overflow: hidden; }
+  .lb-alloc-seg { height: 100%; min-width: 2px; border-radius: 1px; }
+  .lb-alloc-label { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; }
+  .lb-worth { font-weight: 700; font-size: 0.9rem; font-variant-numeric: tabular-nums; color: var(--green); text-align: right; flex-shrink: 0; margin-left: 12px; }
 
   /* ---------- Player Details ---------- */
-  .player-expand {
-    border-bottom: 1px solid var(--border);
-  }
+  .player-expand { border-bottom: 1px solid var(--border); }
   .player-expand:last-child { border-bottom: none; }
-  .player-expand-header {
-    padding: 12px 14px;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    user-select: none;
-    transition: background var(--transition);
-    font-size: 0.9rem;
-  }
+  .player-expand-header { padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; transition: background var(--transition); font-size: 0.9rem; }
   .player-expand-header:hover { background: rgba(255,255,255,0.02); }
-  .player-expand-header .chevron {
-    transition: transform var(--transition);
-    color: var(--text-muted);
-    font-size: 0.7rem;
-  }
+  .player-expand-header .chevron { transition: transform var(--transition); color: var(--text-muted); font-size: 0.7rem; }
   .player-expand-header .chevron.open { transform: rotate(180deg); }
-  .player-expand-body {
-    padding: 0 14px 14px;
-    font-size: 0.82rem;
-  }
+  .player-expand-body { padding: 0 14px 14px; font-size: 0.82rem; }
   .player-expand-body table { width: 100%; border-collapse: collapse; }
-  .player-expand-body td, .player-expand-body th {
-    padding: 5px 8px;
-    text-align: left;
-  }
+  .player-expand-body td, .player-expand-body th { padding: 5px 8px; text-align: left; }
   .player-expand-body th { color: var(--text-muted); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; }
 
   /* ---------- Asset Table (Student) ---------- */
-  .asset-row {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-    transition: background var(--transition);
-  }
+  .asset-row { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border); gap: 12px; transition: background var(--transition); }
   .asset-row:last-child { border-bottom: none; }
   .asset-row:hover { background: rgba(255,255,255,0.015); }
-  .asset-color-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-  .asset-info {
-    flex: 1;
-    min-width: 0;
-  }
-  .asset-name {
-    font-weight: 600;
-    font-size: 0.85rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .asset-price {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    font-variant-numeric: tabular-nums;
-    margin-top: 1px;
-  }
-  .asset-sparkline {
-    width: 60px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-  .asset-shares {
-    font-weight: 700;
-    font-size: 0.9rem;
-    min-width: 24px;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-  }
-  .trade-btns {
-    display: flex;
-    gap: 4px;
-  }
+  .asset-row.busted { background: rgba(220,38,38,0.06); }
+  .asset-color-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .asset-info { flex: 1; min-width: 0; }
+  .asset-name { font-weight: 600; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .asset-price { font-size: 0.75rem; color: var(--text-muted); font-variant-numeric: tabular-nums; margin-top: 1px; }
+  .asset-sparkline { width: 60px; height: 24px; flex-shrink: 0; }
+  .asset-shares { font-weight: 700; font-size: 0.9rem; min-width: 24px; text-align: center; font-variant-numeric: tabular-nums; }
+  .trade-btns { display: flex; gap: 4px; }
   .trade-btn {
-    width: 32px;
-    height: 32px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    color: var(--text);
-    background: var(--surface-2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all var(--transition);
-    font-family: inherit;
+    width: 32px; height: 32px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: 1rem; font-weight: 700; cursor: pointer; color: var(--text);
+    background: var(--surface-2); display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition); font-family: inherit;
   }
   .trade-btn:hover:not(:disabled) { border-color: var(--border-hover); background: var(--surface-3); }
   .trade-btn.buy:hover:not(:disabled) { border-color: rgba(52,211,153,0.4); background: var(--green-dim); color: var(--green); }
   .trade-btn.sell:hover:not(:disabled) { border-color: rgba(248,113,113,0.4); background: var(--red-dim); color: var(--red); }
   .trade-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
+  /* ---------- Chart ---------- */
+  .chart-container { padding: 16px; }
+  .chart-container svg { width: 100%; height: auto; display: block; }
+  .chart-legend { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px 16px 14px; border-top: 1px solid var(--border); }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--text-secondary); white-space: nowrap; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
   /* ---------- Toast ---------- */
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    font-weight: 500;
-    font-size: 0.85rem;
-    z-index: 100;
-    box-shadow: var(--shadow-lg);
-    animation: toast-in 2.5s forwards;
-  }
-  @keyframes toast-in {
-    0% { opacity: 0; transform: translateX(-50%) translateY(8px); }
-    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    85% { opacity: 1; }
-    100% { opacity: 0; }
-  }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--surface-2); border: 1px solid var(--border); padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 500; font-size: 0.85rem; z-index: 100; box-shadow: var(--shadow-lg); animation: toast-in 2.5s forwards; }
+  @keyframes toast-in { 0% { opacity: 0; transform: translateX(-50%) translateY(8px); } 10% { opacity: 1; transform: translateX(-50%) translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; } }
 
-  /* ---------- Empty State ---------- */
-  .empty-state {
-    text-align: center;
-    padding: 32px 16px;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-  }
-
-  /* ---------- Section spacing ---------- */
-  .section { margin-bottom: 20px; }
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  .section-title {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
-  }
+  .empty-state { text-align: center; padding: 32px 16px; color: var(--text-muted); font-size: 0.85rem; }
 
   /* ---------- Confetti ---------- */
-  .confetti-piece {
-    position: fixed;
-    width: 8px;
-    height: 12px;
-    border-radius: 2px;
-    z-index: 200;
-    pointer-events: none;
-    animation: confetti-fall linear forwards;
-  }
-  @keyframes confetti-fall {
-    0% { opacity: 1; transform: translateY(0) rotate(0deg); }
-    100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
-  }
+  .confetti-piece { position: fixed; width: 8px; height: 12px; border-radius: 2px; z-index: 200; pointer-events: none; animation: confetti-fall linear forwards; }
+  @keyframes confetti-fall { 0% { opacity: 1; transform: translateY(0) rotate(0deg); } 100% { opacity: 0; transform: translateY(100vh) rotate(720deg); } }
 
   /* ---------- Responsive ---------- */
   @media (max-width: 640px) {
     .view { padding: 12px; }
     .grid-2 { grid-template-columns: 1fr; }
-    .grid-2 .span-2 { grid-column: span 1; }
     .dice-grid { grid-template-columns: repeat(3, 1fr); }
+    .manual-grid { grid-template-columns: repeat(2, 1fr); }
     .landing-title { font-size: 1.8rem; }
-    .landing-subtitle { font-size: 0.9rem; }
     .topbar { padding: 10px 14px; }
     .stat-value { font-size: 1.2rem; }
   }
@@ -727,12 +316,10 @@
     </div>
     <h1 class="landing-title">Stock Market Game</h1>
     <p class="landing-subtitle">Learn investing through dice rolls and diversification. A classroom simulation of risk and reward.</p>
-
     <div id="landing-buttons" class="landing-actions">
       <button class="btn btn-primary btn-lg" onclick="showCreateGame()">Create Game</button>
       <button class="btn btn-secondary btn-lg" onclick="showJoinGame()">Join Game</button>
     </div>
-
     <div id="join-form" class="join-section hidden">
       <input id="join-code" class="input code-input" placeholder="ROOM CODE" maxlength="4" autocomplete="off" spellcheck="false">
       <input id="join-name" class="input" placeholder="Your name" maxlength="20" autocomplete="off">
@@ -742,7 +329,6 @@
       </div>
       <div id="join-error" class="error-msg"></div>
     </div>
-
     <div id="create-loading" class="hidden" style="margin-top:24px">
       <p style="color:var(--text-secondary)">Creating room...</p>
     </div>
@@ -752,20 +338,14 @@
 <!-- ==================== TEACHER VIEW ==================== -->
 <div id="teacher" class="hidden" style="display:none;flex-direction:column;min-height:100dvh">
   <div class="topbar">
-    <div class="topbar-left">
-      <span class="topbar-title">Teacher Dashboard</span>
-    </div>
+    <div class="topbar-left"><span class="topbar-title">Teacher Dashboard</span></div>
     <div class="topbar-right">
       <span class="badge badge-muted" id="t-round">Lobby</span>
       <span class="room-code" id="t-room-code">----</span>
     </div>
   </div>
-
   <div class="view" style="flex:1">
-    <div id="t-phase-banner" class="phase-banner phase-lobby">
-      <span class="phase-dot"></span>
-      <span>Lobby — Waiting for players</span>
-    </div>
+    <div id="t-phase-banner" class="phase-banner phase-lobby"><span class="phase-dot"></span><span>Lobby — Waiting for players</span></div>
 
     <div class="controls-row" id="t-controls">
       <button class="btn btn-green" id="t-btn-start" onclick="teacherStartTrading()">Start Round 1</button>
@@ -773,24 +353,45 @@
       <button class="btn btn-primary hidden" id="t-btn-roll" onclick="teacherRollDice()">Roll Dice</button>
       <button class="btn btn-green hidden" id="t-btn-next" onclick="teacherNextRound()">Next Round</button>
       <button class="btn btn-danger btn-sm" id="t-btn-end" onclick="teacherEndGame()">End Game</button>
+      <div style="flex:1"></div>
+      <label class="manual-toggle" id="t-manual-toggle" style="display:none">
+        <input type="checkbox" id="t-manual-check" onchange="toggleManualMode()">
+        <span class="toggle-track"></span>
+        <span>Manual Dice</span>
+      </label>
+    </div>
+
+    <div id="t-manual-form" class="manual-form hidden">
+      <div class="manual-grid" id="t-manual-grid"></div>
+      <button class="btn btn-primary" onclick="submitManualDice()">Submit Dice Results</button>
     </div>
 
     <div id="t-dice-area" class="hidden section">
       <div id="t-cash-flow" class="cash-flow-banner"></div>
-      <div class="dice-stage">
-        <div id="t-dice-results" class="dice-grid"></div>
-      </div>
+      <div id="t-bust-banner" class="hidden"></div>
+      <div class="dice-stage"><div id="t-dice-results" class="dice-grid"></div></div>
     </div>
 
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header"><h3>Leaderboard</h3></div>
-        <div id="t-leaderboard"></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h3>Player Portfolios</h3></div>
-        <div id="t-players"></div>
-      </div>
+    <div id="t-asset-chart-section" class="card section hidden">
+      <div class="card-header"><h3>Asset Prices</h3></div>
+      <div class="chart-container" id="t-asset-chart"></div>
+      <div class="chart-legend" id="t-asset-legend"></div>
+    </div>
+
+    <div class="card section">
+      <div class="card-header"><h3>Leaderboard</h3></div>
+      <div id="t-leaderboard"></div>
+    </div>
+
+    <div id="t-nw-chart-section" class="card section hidden">
+      <div class="card-header"><h3>Net Worth History</h3></div>
+      <div class="chart-container" id="t-nw-chart"></div>
+      <div class="chart-legend" id="t-nw-legend"></div>
+    </div>
+
+    <div class="card section">
+      <div class="card-header"><h3>Player Portfolios</h3></div>
+      <div id="t-players"></div>
     </div>
   </div>
 </div>
@@ -798,20 +399,14 @@
 <!-- ==================== STUDENT VIEW ==================== -->
 <div id="student" class="hidden" style="display:none;flex-direction:column;min-height:100dvh">
   <div class="topbar">
-    <div class="topbar-left">
-      <span class="topbar-title" id="s-name">Player</span>
-    </div>
+    <div class="topbar-left"><span class="topbar-title" id="s-name">Player</span></div>
     <div class="topbar-right">
       <span class="badge badge-muted" id="s-round">Lobby</span>
       <span class="room-code" id="s-room-code">----</span>
     </div>
   </div>
-
   <div class="view" style="flex:1">
-    <div id="s-phase-banner" class="phase-banner phase-lobby">
-      <span class="phase-dot"></span>
-      <span>Waiting for game to start...</span>
-    </div>
+    <div id="s-phase-banner" class="phase-banner phase-lobby"><span class="phase-dot"></span><span>Waiting for game to start...</span></div>
 
     <div class="grid-2" style="grid-template-columns:1fr 1fr">
       <div class="stat-card">
@@ -826,9 +421,8 @@
 
     <div id="s-dice-area" class="hidden section">
       <div id="s-cash-flow" class="cash-flow-banner"></div>
-      <div class="dice-stage">
-        <div id="s-dice-results" class="dice-grid"></div>
-      </div>
+      <div id="s-bust-banner" class="hidden"></div>
+      <div class="dice-stage"><div id="s-dice-results" class="dice-grid"></div></div>
     </div>
 
     <div class="card section">
@@ -839,9 +433,21 @@
       <div id="s-asset-body"></div>
     </div>
 
+    <div id="s-asset-chart-section" class="card section hidden">
+      <div class="card-header"><h3>Asset Prices</h3></div>
+      <div class="chart-container" id="s-asset-chart"></div>
+      <div class="chart-legend" id="s-asset-legend"></div>
+    </div>
+
     <div class="card section">
       <div class="card-header"><h3>Leaderboard</h3></div>
       <div id="s-leaderboard"></div>
+    </div>
+
+    <div id="s-nw-chart-section" class="card section hidden">
+      <div class="card-header"><h3>Net Worth History</h3></div>
+      <div class="chart-container" id="s-nw-chart"></div>
+      <div class="chart-legend" id="s-nw-legend"></div>
     </div>
   </div>
 </div>
@@ -852,30 +458,26 @@
 (function() {
   const socket = io();
 
-  // --- State ---
   let currentView = 'landing';
   let gameState = null;
   let myName = '';
   let isTeacher = false;
-  let diceAnimating = false;
+  let manualMode = false;
 
-  // --- Helpers ---
+  const PLAYER_COLORS = ['#6366f1','#f472b6','#22d3ee','#facc15','#fb923c','#a78bfa','#4ade80','#f87171','#38bdf8','#e879f9'];
+  const BUST_DIE_LABELS = ['Low Risk Bonds','High Risk Bonds','Med Risk Stocks','High Risk Stocks','Med Risk Stocks','High Risk Stocks'];
+
   const $ = id => document.getElementById(id);
-  const show = id => { const el = $(id); el.classList.remove('hidden'); el.style.display = ''; };
-  const hide = id => { const el = $(id); el.classList.add('hidden'); };
+  const show = id => { const el = $(id); if (el) { el.classList.remove('hidden'); el.style.display = ''; } };
+  const hide = id => { const el = $(id); if (el) el.classList.add('hidden'); };
   const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const fmtPct = n => (n >= 0 ? '+' : '') + n + '%';
 
   function switchView(view) {
-    ['landing', 'teacher', 'student'].forEach(v => {
+    ['landing','teacher','student'].forEach(v => {
       const el = $(v);
-      if (v === view) {
-        el.classList.remove('hidden');
-        el.style.display = 'flex';
-      } else {
-        el.classList.add('hidden');
-        el.style.display = 'none';
-      }
+      if (v === view) { el.classList.remove('hidden'); el.style.display = 'flex'; }
+      else { el.classList.add('hidden'); el.style.display = 'none'; }
     });
     currentView = view;
   }
@@ -888,7 +490,8 @@
     setTimeout(() => t.remove(), 2700);
   }
 
-  // --- Sparkline SVG ---
+  // ==================== SVG CHART HELPERS ====================
+
   function sparklineSVG(data, color, width, height) {
     if (!data || data.length < 2) return '';
     const min = Math.min(...data);
@@ -907,128 +510,145 @@
     </svg>`;
   }
 
-  // --- 3D Dice Builder ---
-  function buildDiceCube(value, color, size) {
-    size = size || 56;
-    const half = size / 2;
-    const pipPositions = {
-      1: [5],
-      2: [3, 7],
-      3: [3, 5, 7],
-      4: [1, 3, 7, 9],
-      5: [1, 3, 5, 7, 9],
-      6: [1, 3, 4, 6, 7, 9],
-    };
+  function multiLineChartSVG(series, width, height) {
+    const m = { t: 10, r: 10, b: 22, l: 50 };
+    const cw = width - m.l - m.r;
+    const ch = height - m.t - m.b;
+    let allVals = [];
+    let maxLen = 0;
+    series.forEach(s => {
+      s.data.forEach(v => { if (v !== null && v !== undefined) allVals.push(v); });
+      maxLen = Math.max(maxLen, s.data.length);
+    });
+    if (allVals.length === 0 || maxLen < 2) return '';
+    const yMin = Math.min(...allVals) * 0.95;
+    const yMax = Math.max(...allVals) * 1.05;
+    const yRange = yMax - yMin || 1;
+    const xScale = i => m.l + (i / (maxLen - 1)) * cw;
+    const yScale = v => m.t + ch - ((v - yMin) / yRange) * ch;
 
+    let svg = `<svg viewBox="0 0 ${width} ${height}" fill="none" xmlns="http://www.w3.org/2000/svg">`;
+
+    // Grid
+    const gridN = 4;
+    for (let g = 0; g <= gridN; g++) {
+      const y = m.t + (g / gridN) * ch;
+      const val = yMax - (g / gridN) * yRange;
+      svg += `<line x1="${m.l}" y1="${y}" x2="${m.l+cw}" y2="${y}" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
+      svg += `<text x="${m.l-6}" y="${y+3}" text-anchor="end" fill="#475569" font-size="9" font-family="Inter,sans-serif">${Math.round(val)}</text>`;
+    }
+
+    // X labels
+    for (let i = 0; i < maxLen; i++) {
+      const x = xScale(i);
+      const label = i === 0 ? 'Start' : 'R' + i;
+      svg += `<text x="${x}" y="${height-4}" text-anchor="middle" fill="#475569" font-size="9" font-family="Inter,sans-serif">${label}</text>`;
+    }
+
+    // Lines
+    series.forEach(s => {
+      let pathD = '';
+      let dots = '';
+      let started = false;
+      s.data.forEach((v, i) => {
+        if (v === null || v === undefined) { started = false; return; }
+        const x = xScale(i);
+        const y = yScale(v);
+        if (!started) { pathD += `M${x},${y}`; started = true; }
+        else { pathD += ` L${x},${y}`; }
+        // Mark busts (value === 0) with red circle
+        if (v === 0) {
+          dots += `<circle cx="${x}" cy="${y}" r="4" fill="#dc2626" stroke="#fff" stroke-width="1"/>`;
+        } else {
+          dots += `<circle cx="${x}" cy="${y}" r="2" fill="${s.color}"/>`;
+        }
+      });
+      if (pathD) {
+        svg += `<path d="${pathD}" stroke="${s.color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>`;
+        svg += dots;
+      }
+    });
+    svg += '</svg>';
+    return svg;
+  }
+
+  function renderChartLegend(containerId, items) {
+    const c = $(containerId);
+    c.innerHTML = items.map(it => `<span class="legend-item"><span class="legend-dot" style="background:${it.color}"></span>${it.label}</span>`).join('');
+  }
+
+  function renderAssetChart(chartId, legendId, sectionId, state) {
+    if (!state.priceHistory || state.priceHistory[0].length < 2) { hide(sectionId); return; }
+    show(sectionId);
+    const series = state.assets.map((a, i) => ({ data: state.priceHistory[i], color: a.color, label: a.name }));
+    $(chartId).innerHTML = multiLineChartSVG(series, 600, 200);
+    renderChartLegend(legendId, series);
+  }
+
+  function renderNetWorthChart(chartId, legendId, sectionId, state) {
+    const nwh = state.netWorthHistory;
+    const names = Object.keys(nwh);
+    if (names.length === 0 || !names.some(n => nwh[n].length >= 2)) { hide(sectionId); return; }
+    show(sectionId);
+    const playerOrder = state.leaderboard.map(p => p.name);
+    const series = playerOrder.map((name, i) => ({
+      data: nwh[name] || [],
+      color: PLAYER_COLORS[i % PLAYER_COLORS.length],
+      label: name,
+    }));
+    $(chartId).innerHTML = multiLineChartSVG(series, 600, 200);
+    renderChartLegend(legendId, series);
+  }
+
+  // ==================== 3D DICE ====================
+
+  function buildDiceCube(value, color) {
+    const pipPositions = { 1:[5], 2:[3,7], 3:[3,5,7], 4:[1,3,7,9], 5:[1,3,5,7,9], 6:[1,3,4,6,7,9] };
     function makePips(num) {
       const on = pipPositions[num] || [];
-      let html = '<div class="pips">';
-      for (let i = 1; i <= 9; i++) {
-        html += `<span class="pip ${on.includes(i) ? 'on' : ''}"></span>`;
-      }
-      html += '</div>';
-      return html;
+      let h = '<div class="pips">';
+      for (let i = 1; i <= 9; i++) h += `<span class="pip ${on.includes(i)?'on':''}"></span>`;
+      return h + '</div>';
     }
-
     let faces = '';
-    for (let f = 1; f <= 6; f++) {
-      faces += `<div class="dice-face dice-face-${f}" style="background:${color}">${makePips(f)}</div>`;
-    }
-
-    // Calculate final rotation to show the desired value
-    const rotations = {
-      1: 'rotateX(0deg) rotateY(0deg)',
-      2: 'rotateX(0deg) rotateY(-90deg)',
-      3: 'rotateX(0deg) rotateY(180deg)',
-      4: 'rotateX(0deg) rotateY(90deg)',
-      5: 'rotateX(-90deg) rotateY(0deg)',
-      6: 'rotateX(90deg) rotateY(0deg)',
-    };
-
-    return {
-      html: `<div class="dice-wrap"><div class="dice-cube" style="--final-rotation:${rotations[value]}">${faces}</div></div>`,
-      finalRotation: rotations[value],
-    };
+    for (let f = 1; f <= 6; f++) faces += `<div class="dice-face dice-face-${f}" style="background:${color}">${makePips(f)}</div>`;
+    const rotations = { 1:'rotateX(0deg) rotateY(0deg)', 2:'rotateX(0deg) rotateY(-90deg)', 3:'rotateX(0deg) rotateY(180deg)', 4:'rotateX(0deg) rotateY(90deg)', 5:'rotateX(-90deg) rotateY(0deg)', 6:'rotateX(90deg) rotateY(0deg)' };
+    return `<div class="dice-wrap"><div class="dice-cube" style="--final-rotation:${rotations[value]}">${faces}</div></div>`;
   }
 
   function triggerDiceRoll(container) {
     const cubes = container.querySelectorAll('.dice-cube');
-    cubes.forEach((cube, i) => {
-      setTimeout(() => {
-        cube.classList.add('rolling');
-      }, i * 120);
-    });
+    cubes.forEach((cube, i) => { setTimeout(() => cube.classList.add('rolling'), i * 120); });
   }
 
-  // --- Landing ---
+  // ==================== LANDING ====================
+
   window.showCreateGame = function() {
-    hide('landing-buttons');
-    show('create-loading');
+    hide('landing-buttons'); show('create-loading');
     socket.emit('create-room', (res) => {
-      if (res.ok) {
-        isTeacher = true;
-        gameState = res.room;
-        sessionStorage.setItem('role', 'teacher');
-        sessionStorage.setItem('roomCode', res.room.code);
-        switchView('teacher');
-        renderTeacher();
-      } else {
-        show('landing-buttons');
-        hide('create-loading');
-      }
+      if (res.ok) { isTeacher = true; gameState = res.room; sessionStorage.setItem('role','teacher'); sessionStorage.setItem('roomCode',res.room.code); switchView('teacher'); renderTeacher(); }
+      else { show('landing-buttons'); hide('create-loading'); }
     });
   };
-
-  window.showJoinGame = function() {
-    hide('landing-buttons');
-    show('join-form');
-    $('join-code').focus();
-  };
-
-  window.backToLanding = function() {
-    show('landing-buttons');
-    hide('join-form');
-    hide('create-loading');
-    $('join-error').textContent = '';
-  };
-
+  window.showJoinGame = function() { hide('landing-buttons'); show('join-form'); $('join-code').focus(); };
+  window.backToLanding = function() { show('landing-buttons'); hide('join-form'); hide('create-loading'); $('join-error').textContent = ''; };
   window.joinRoom = function() {
     const code = $('join-code').value.trim().toUpperCase();
     const name = $('join-name').value.trim();
     $('join-error').textContent = '';
-
-    if (!code || code.length !== 4) {
-      $('join-error').textContent = 'Enter a 4-character room code.';
-      return;
-    }
-    if (!name) {
-      $('join-error').textContent = 'Enter your name.';
-      return;
-    }
-
+    if (!code || code.length !== 4) { $('join-error').textContent = 'Enter a 4-character room code.'; return; }
+    if (!name) { $('join-error').textContent = 'Enter your name.'; return; }
     socket.emit('join-room', { code, name }, (res) => {
-      if (res.ok) {
-        myName = res.playerName;
-        gameState = res.room;
-        isTeacher = false;
-        sessionStorage.setItem('role', 'student');
-        sessionStorage.setItem('roomCode', res.room.code);
-        sessionStorage.setItem('playerName', myName);
-        switchView('student');
-        renderStudent();
-      } else {
-        $('join-error').textContent = res.error;
-      }
+      if (res.ok) { myName = res.playerName; gameState = res.room; isTeacher = false; sessionStorage.setItem('role','student'); sessionStorage.setItem('roomCode',res.room.code); sessionStorage.setItem('playerName',myName); switchView('student'); renderStudent(); }
+      else { $('join-error').textContent = res.error; }
     });
   };
-
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && currentView === 'landing' && !$('join-form').classList.contains('hidden')) {
-      joinRoom();
-    }
+    if (e.key === 'Enter' && currentView === 'landing' && !$('join-form').classList.contains('hidden')) joinRoom();
   });
 
-  // --- Room Update Handler ---
+  // ==================== SOCKET HANDLERS ====================
+
   socket.on('room-update', (state) => {
     gameState = state;
     if (isTeacher) renderTeacher();
@@ -1036,62 +656,26 @@
   });
 
   socket.on('dice-rolled', (data) => {
-    diceAnimating = true;
-    // Re-render to build the dice, then trigger animation
-    if (isTeacher) {
-      renderTeacher();
-      triggerDiceRoll($('t-dice-results'));
-      const cfCube = document.querySelector('#t-cash-flow .dice-cube');
-      if (cfCube) cfCube.classList.add('rolling');
-    } else {
-      renderStudent();
-      triggerDiceRoll($('s-dice-results'));
-      const cfCube = document.querySelector('#s-cash-flow .dice-cube');
-      if (cfCube) cfCube.classList.add('rolling');
-    }
-    setTimeout(() => { diceAnimating = false; }, 2500);
+    if (isTeacher) { renderTeacher(); triggerDiceRoll($('t-dice-results')); const c = document.querySelector('#t-cash-flow .dice-cube'); if(c) c.classList.add('rolling'); }
+    else { renderStudent(); triggerDiceRoll($('s-dice-results')); const c = document.querySelector('#s-cash-flow .dice-cube'); if(c) c.classList.add('rolling'); }
   });
 
-  socket.on('room-expired', () => {
-    showToast('Room expired.');
-    switchView('landing');
-    show('landing-buttons');
-    hide('join-form');
-    hide('create-loading');
-  });
+  socket.on('room-expired', () => { showToast('Room expired.'); switchView('landing'); show('landing-buttons'); hide('join-form'); hide('create-loading'); });
 
-  // --- Reconnect ---
   socket.on('connect', () => {
     const role = sessionStorage.getItem('role');
     const code = sessionStorage.getItem('roomCode');
     if (!code) return;
-
     if (role === 'teacher') {
-      socket.emit('rejoin-teacher', { code }, (res) => {
-        if (res.ok) {
-          isTeacher = true;
-          gameState = res.room;
-          switchView('teacher');
-          renderTeacher();
-        }
-      });
+      socket.emit('rejoin-teacher', { code }, (res) => { if (res.ok) { isTeacher = true; gameState = res.room; switchView('teacher'); renderTeacher(); } });
     } else if (role === 'student') {
       const name = sessionStorage.getItem('playerName');
-      if (name) {
-        socket.emit('join-room', { code, name }, (res) => {
-          if (res.ok) {
-            myName = res.playerName;
-            gameState = res.room;
-            isTeacher = false;
-            switchView('student');
-            renderStudent();
-          }
-        });
-      }
+      if (name) socket.emit('join-room', { code, name }, (res) => { if (res.ok) { myName = res.playerName; gameState = res.room; isTeacher = false; switchView('student'); renderStudent(); } });
     }
   });
 
   // ==================== TEACHER RENDER ====================
+
   function renderTeacher() {
     const s = gameState;
     $('t-room-code').textContent = s.code;
@@ -1100,64 +684,53 @@
     // Phase banner
     const banner = $('t-phase-banner');
     banner.className = 'phase-banner';
-    if (s.phase === 'lobby') {
-      banner.classList.add('phase-lobby');
-      banner.innerHTML = `<span class="phase-dot"></span><span>Lobby — ${s.players.length} player${s.players.length !== 1 ? 's' : ''} joined</span>`;
-    } else if (s.phase === 'trading') {
-      banner.classList.add('phase-trading');
-      banner.innerHTML = '<span class="phase-dot"></span><span>Trading Open</span>';
-    } else if (s.phase === 'rolling') {
-      banner.classList.add('phase-locked');
-      const msg = s.diceResults ? 'Dice Rolled — Review Results' : 'Trading Locked — Ready to Roll';
-      banner.innerHTML = `<span class="phase-dot"></span><span>${msg}</span>`;
-    } else if (s.phase === 'finished') {
-      banner.classList.add('phase-finished');
-      banner.innerHTML = '<span class="phase-dot"></span><span>Game Over</span>';
-    }
+    if (s.phase === 'lobby') { banner.classList.add('phase-lobby'); banner.innerHTML = `<span class="phase-dot"></span><span>Lobby — ${s.players.length} player${s.players.length!==1?'s':''} joined</span>`; }
+    else if (s.phase === 'trading') { banner.classList.add('phase-trading'); banner.innerHTML = '<span class="phase-dot"></span><span>Trading Open</span>'; }
+    else if (s.phase === 'rolling') { banner.classList.add('phase-locked'); const msg = s.diceResults ? 'Dice Rolled — Review Results' : 'Trading Locked — Ready to Roll'; banner.innerHTML = `<span class="phase-dot"></span><span>${msg}</span>`; }
+    else if (s.phase === 'finished') { banner.classList.add('phase-finished'); banner.innerHTML = '<span class="phase-dot"></span><span>Game Over</span>'; }
 
     // Buttons
-    const btnStart = $('t-btn-start');
-    const btnLock = $('t-btn-lock');
-    const btnRoll = $('t-btn-roll');
-    const btnNext = $('t-btn-next');
-    const btnEnd = $('t-btn-end');
-
+    const btnStart = $('t-btn-start'), btnLock = $('t-btn-lock'), btnRoll = $('t-btn-roll'), btnNext = $('t-btn-next'), btnEnd = $('t-btn-end');
     [btnStart, btnLock, btnRoll, btnNext].forEach(b => b.classList.add('hidden'));
 
-    if (s.phase === 'lobby') {
-      btnStart.classList.remove('hidden');
-      btnStart.textContent = 'Start Round 1';
-      btnStart.disabled = s.players.length === 0;
-    } else if (s.phase === 'trading') {
-      btnLock.classList.remove('hidden');
-    } else if (s.phase === 'rolling' && !s.diceResults) {
-      btnRoll.classList.remove('hidden');
-    } else if (s.phase === 'rolling' && s.diceResults) {
-      if (s.round >= s.maxRounds) {
-        btnEnd.textContent = 'Show Final Results';
-      } else {
-        btnNext.classList.remove('hidden');
-        btnNext.textContent = `Start Round ${s.round + 1}`;
-      }
+    const isEvenRound = s.round % 2 === 0;
+    const showManualToggle = s.phase === 'rolling' && !s.diceResults;
+
+    if (s.phase === 'lobby') { btnStart.classList.remove('hidden'); btnStart.textContent = 'Start Round 1'; btnStart.disabled = s.players.length === 0; }
+    else if (s.phase === 'trading') { btnLock.classList.remove('hidden'); }
+    else if (s.phase === 'rolling' && !s.diceResults) { if (!manualMode) btnRoll.classList.remove('hidden'); }
+    else if (s.phase === 'rolling' && s.diceResults) {
+      if (s.round >= s.maxRounds) { btnEnd.textContent = 'Show Final Results'; }
+      else { btnNext.classList.remove('hidden'); btnNext.textContent = `Start Round ${s.round + 1}`; }
     }
     btnEnd.classList.toggle('hidden', s.phase === 'finished');
 
-    // Dice results
-    if (s.diceResults) {
-      show('t-dice-area');
-      renderDiceResults('t-dice-results', 't-cash-flow', s);
+    // Manual toggle visibility
+    $('t-manual-toggle').style.display = showManualToggle ? 'flex' : 'none';
+
+    // Manual form
+    if (showManualToggle && manualMode) {
+      show('t-manual-form');
+      buildManualForm(s);
     } else {
-      hide('t-dice-area');
+      hide('t-manual-form');
     }
 
-    // Leaderboard
-    renderLeaderboard('t-leaderboard', s.leaderboard);
+    // Dice results
+    if (s.diceResults) { show('t-dice-area'); renderDiceResults('t-dice-results','t-cash-flow', s); renderBustBanner('t-bust-banner', s); }
+    else { hide('t-dice-area'); hide('t-bust-banner'); }
 
-    // Player details
+    // Charts
+    renderAssetChart('t-asset-chart','t-asset-legend','t-asset-chart-section', s);
+    renderNetWorthChart('t-nw-chart','t-nw-legend','t-nw-chart-section', s);
+
+    // Leaderboard with allocations
+    renderLeaderboard('t-leaderboard', s);
     renderPlayerDetails(s);
   }
 
   // ==================== STUDENT RENDER ====================
+
   function renderStudent() {
     const s = gameState;
     $('s-room-code').textContent = s.code;
@@ -1165,40 +738,21 @@
     $('s-round').textContent = s.round === 0 ? 'Lobby' : `Round ${s.round} / ${s.maxRounds}`;
 
     const me = s.players.find(p => p.name === myName);
-    if (me) {
-      $('s-cash').textContent = fmt(me.cash);
-      $('s-net-worth').textContent = fmt(me.netWorth);
-    }
+    if (me) { $('s-cash').textContent = fmt(me.cash); $('s-net-worth').textContent = fmt(me.netWorth); }
 
-    // Trading status badge
     const statusBadge = $('s-trading-status');
-    if (s.phase === 'trading') {
-      statusBadge.className = 'badge badge-green';
-      statusBadge.textContent = 'Trading Open';
-    } else {
-      statusBadge.className = 'badge badge-muted';
-      statusBadge.textContent = 'Locked';
-    }
+    if (s.phase === 'trading') { statusBadge.className = 'badge badge-green'; statusBadge.textContent = 'Trading Open'; }
+    else { statusBadge.className = 'badge badge-muted'; statusBadge.textContent = 'Locked'; }
 
     // Phase banner
     const banner = $('s-phase-banner');
     banner.className = 'phase-banner';
-    if (s.phase === 'lobby') {
-      banner.classList.add('phase-lobby');
-      banner.innerHTML = '<span class="phase-dot"></span><span>Waiting for game to start...</span>';
-    } else if (s.phase === 'trading') {
-      banner.classList.add('phase-trading');
-      banner.innerHTML = '<span class="phase-dot"></span><span>Trade Now!</span>';
-    } else if (s.phase === 'rolling') {
-      banner.classList.add('phase-locked');
-      banner.innerHTML = '<span class="phase-dot"></span><span>Trading Locked</span>';
-    } else if (s.phase === 'finished') {
-      banner.classList.add('phase-finished');
-      banner.innerHTML = '<span class="phase-dot"></span><span>Game Over</span>';
-      launchConfetti();
-    }
+    if (s.phase === 'lobby') { banner.classList.add('phase-lobby'); banner.innerHTML = '<span class="phase-dot"></span><span>Waiting for game to start...</span>'; }
+    else if (s.phase === 'trading') { banner.classList.add('phase-trading'); banner.innerHTML = '<span class="phase-dot"></span><span>Trade Now!</span>'; }
+    else if (s.phase === 'rolling') { banner.classList.add('phase-locked'); banner.innerHTML = '<span class="phase-dot"></span><span>Trading Locked</span>'; }
+    else if (s.phase === 'finished') { banner.classList.add('phase-finished'); banner.innerHTML = '<span class="phase-dot"></span><span>Game Over</span>'; launchConfetti(); }
 
-    // Asset list
+    // Assets
     const body = $('s-asset-body');
     body.innerHTML = '';
     s.assets.forEach((asset, i) => {
@@ -1206,67 +760,88 @@
       const canSell = s.phase === 'trading' && me && me.shares[i] > 0;
       const myShares = me ? me.shares[i] : 0;
       const history = s.priceHistory ? s.priceHistory[i] : null;
-
+      const isBusted = s.bustResult && s.bustResult.assetIndex === i;
       const row = document.createElement('div');
-      row.className = 'asset-row';
+      row.className = 'asset-row' + (isBusted ? ' busted' : '');
       row.innerHTML = `
         <span class="asset-color-dot" style="background:${asset.color}"></span>
         <div class="asset-info">
-          <div class="asset-name">${asset.name}</div>
-          <div class="asset-price">${fmt(s.prices[i])}</div>
+          <div class="asset-name">${asset.name}${isBusted ? ' <span style="color:var(--red);font-size:0.7rem">BUSTED</span>' : ''}</div>
+          <div class="asset-price">${s.prices[i] === 0 ? '<span style="color:var(--red)">$0.00</span>' : fmt(s.prices[i])}</div>
         </div>
         <div class="asset-sparkline">${sparklineSVG(history, asset.color, 60, 24)}</div>
         <span class="asset-shares">${myShares}</span>
         <div class="trade-btns">
-          <button class="trade-btn sell" ${canSell ? '' : 'disabled'} data-action="sell" data-idx="${i}">-</button>
-          <button class="trade-btn buy" ${canBuy ? '' : 'disabled'} data-action="buy" data-idx="${i}">+</button>
+          <button class="trade-btn sell" ${canSell?'':'disabled'} data-action="sell" data-idx="${i}">-</button>
+          <button class="trade-btn buy" ${canBuy?'':'disabled'} data-action="buy" data-idx="${i}">+</button>
         </div>
       `;
       body.appendChild(row);
     });
 
     // Dice results
-    if (s.diceResults) {
-      show('s-dice-area');
-      renderDiceResults('s-dice-results', 's-cash-flow', s);
-    } else {
-      hide('s-dice-area');
-    }
+    if (s.diceResults) { show('s-dice-area'); renderDiceResults('s-dice-results','s-cash-flow', s); renderBustBanner('s-bust-banner', s); }
+    else { hide('s-dice-area'); hide('s-bust-banner'); }
 
-    // Leaderboard
-    renderLeaderboard('s-leaderboard', s.leaderboard);
+    // Charts
+    renderAssetChart('s-asset-chart','s-asset-legend','s-asset-chart-section', s);
+    renderNetWorthChart('s-nw-chart','s-nw-legend','s-nw-chart-section', s);
+
+    renderLeaderboard('s-leaderboard', s);
   }
 
-  // --- Trade button handler ---
+  // ==================== TRADE HANDLER ====================
+
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('[data-action]');
     if (!btn) return;
-    const action = btn.dataset.action;
-    const idx = parseInt(btn.dataset.idx);
-
     btn.disabled = true;
-    socket.emit(action, { assetIndex: idx }, (res) => {
-      if (!res.ok) {
-        showToast(res.error || 'Trade failed');
-      }
-    });
+    socket.emit(btn.dataset.action, { assetIndex: parseInt(btn.dataset.idx) }, (res) => { if (!res.ok) showToast(res.error || 'Trade failed'); });
   });
 
-  // ==================== SHARED RENDER HELPERS ====================
-  function renderLeaderboard(containerId, leaderboard) {
+  // ==================== SHARED RENDERERS ====================
+
+  function renderLeaderboard(containerId, state) {
     const container = $(containerId);
     container.innerHTML = '';
-    if (leaderboard.length === 0) {
-      container.innerHTML = '<div class="empty-state">No players yet</div>';
-      return;
-    }
-    leaderboard.forEach((entry, i) => {
+    const lb = state.leaderboard;
+    if (lb.length === 0) { container.innerHTML = '<div class="empty-state">No players yet</div>'; return; }
+
+    lb.forEach((entry, i) => {
       const row = document.createElement('div');
-      row.className = 'lb-row' + (i < 3 ? ` rank-${i + 1}` : '');
+      row.className = 'lb-row' + (i < 3 ? ` rank-${i+1}` : '');
       const isMe = entry.name === myName;
+
+      // Build allocation bar
+      let totalValue = entry.cash;
+      const assetValues = entry.shares.map((sh, idx) => sh * state.prices[idx]);
+      assetValues.forEach(v => totalValue += v);
+      totalValue = totalValue || 1;
+
+      let allocBar = '<div class="lb-alloc">';
+      const cashPct = (entry.cash / totalValue) * 100;
+      allocBar += `<div class="lb-alloc-seg" style="width:${cashPct}%;background:#475569" title="Cash: ${fmt(entry.cash)}"></div>`;
+      state.assets.forEach((a, idx) => {
+        const pct = (assetValues[idx] / totalValue) * 100;
+        if (pct > 0.5) allocBar += `<div class="lb-alloc-seg" style="width:${pct}%;background:${a.color}" title="${a.name}: ${entry.shares[idx]} shares"></div>`;
+      });
+      allocBar += '</div>';
+
+      // Build allocation text
+      let allocParts = [];
+      if (entry.cash > 0) allocParts.push(`Cash ${Math.round(cashPct)}%`);
+      state.assets.forEach((a, idx) => {
+        const pct = (assetValues[idx] / totalValue) * 100;
+        if (pct >= 1) allocParts.push(`${a.name.split(' ').pop()} ${Math.round(pct)}%`);
+      });
+
       row.innerHTML = `
-        <span class="lb-rank">${i + 1}</span>
-        <span class="lb-name ${entry.connected ? '' : 'disconnected'}">${entry.name}${entry.connected ? '' : ' (off)'}${isMe ? ' (you)' : ''}</span>
+        <span class="lb-rank">${i+1}</span>
+        <div class="lb-info">
+          <div class="lb-name ${entry.connected?'':'disconnected'}">${entry.name}${entry.connected?'':' (off)'}${isMe?' (you)':''}</div>
+          ${allocBar}
+          <div class="lb-alloc-label">${allocParts.join(' · ')}</div>
+        </div>
         <span class="lb-worth">${fmt(entry.netWorth)}</span>
       `;
       container.appendChild(row);
@@ -1274,30 +849,38 @@
   }
 
   function renderDiceResults(diceContainerId, cashFlowId, state) {
-    const diceResults = state.diceResults;
-    const cashFlowResult = state.cashFlowResult;
-
     const dc = $(diceContainerId);
     dc.innerHTML = '';
-    diceResults.forEach(d => {
-      const dice = buildDiceCube(d.dieValue, d.color);
+    state.diceResults.forEach(d => {
       const resultClass = d.returnPct >= 0 ? 'badge-green' : 'badge-red';
       const slot = document.createElement('div');
       slot.className = 'dice-slot';
       slot.innerHTML = `
         <div class="dice-slot-label">${d.asset}</div>
-        ${dice.html}
+        ${buildDiceCube(d.dieValue, d.color)}
         <span class="dice-slot-result badge ${resultClass}">${fmtPct(d.returnPct)}</span>
       `;
       dc.appendChild(slot);
     });
 
+    // Bust die
+    if (state.bustResult) {
+      const slot = document.createElement('div');
+      slot.className = 'dice-slot';
+      slot.innerHTML = `
+        <div class="dice-slot-label" style="color:var(--red)">Bust Die</div>
+        ${buildDiceCube(state.bustResult.dieValue, '#991b1b')}
+        <span class="dice-slot-result badge badge-red">${state.bustResult.asset}</span>
+      `;
+      dc.appendChild(slot);
+    }
+
+    // Cash flow
     const cf = $(cashFlowId);
-    const amt = cashFlowResult.amount;
-    const cfDice = buildDiceCube(cashFlowResult.dieValue, '#475569');
+    const amt = state.cashFlowResult.amount;
     const amtClass = amt >= 0 ? 'green' : 'red';
     cf.innerHTML = `
-      ${cfDice.html}
+      ${buildDiceCube(state.cashFlowResult.dieValue, '#475569')}
       <div>
         <div class="cash-flow-label">Cash Flow</div>
         <div class="cash-flow-amount" style="color:var(--${amtClass})">${amt >= 0 ? '+' : ''}${fmt(amt)}</div>
@@ -1305,107 +888,112 @@
     `;
   }
 
+  function renderBustBanner(bannerId, state) {
+    const el = $(bannerId);
+    if (state.bustResult) {
+      el.className = 'bust-banner';
+      el.innerHTML = `
+        <div>
+          <div class="bust-label">Market Crash</div>
+          <div class="bust-asset">${state.bustResult.asset}</div>
+          <div class="bust-sub">Collapsed to $0 — all shares wiped. Recovers to $100 next round.</div>
+        </div>
+      `;
+      show(bannerId);
+    } else {
+      hide(bannerId);
+    }
+  }
+
   function renderPlayerDetails(state) {
     const container = $('t-players');
     container.innerHTML = '';
-    if (state.players.length === 0) {
-      container.innerHTML = '<div class="empty-state">No players yet</div>';
-      return;
-    }
+    if (state.players.length === 0) { container.innerHTML = '<div class="empty-state">No players yet</div>'; return; }
     state.players.forEach(player => {
       const div = document.createElement('div');
       div.className = 'player-expand';
-
       const header = document.createElement('div');
       header.className = 'player-expand-header';
       header.innerHTML = `
-        <span style="font-weight:500">${player.name} ${player.connected ? '' : '<span style="color:var(--text-muted)">(offline)</span>'}</span>
+        <span style="font-weight:500">${player.name} ${player.connected?'':'<span style="color:var(--text-muted)">(offline)</span>'}</span>
         <div style="display:flex;align-items:center;gap:10px">
           <span style="font-weight:700;color:var(--green);font-variant-numeric:tabular-nums">${fmt(player.netWorth)}</span>
           <span class="chevron">&#9660;</span>
         </div>
       `;
-
       const body = document.createElement('div');
       body.className = 'player-expand-body hidden';
       let rows = '';
       state.assets.forEach((asset, i) => {
         const value = player.shares[i] * state.prices[i];
-        rows += `<tr>
-          <td><span class="asset-color-dot" style="background:${asset.color};display:inline-block;margin-right:6px"></span>${asset.name}</td>
-          <td style="text-align:center">${player.shares[i]}</td>
-          <td style="text-align:right;font-variant-numeric:tabular-nums">${fmt(value)}</td>
-        </tr>`;
+        rows += `<tr><td><span class="asset-color-dot" style="background:${asset.color};display:inline-block;margin-right:6px"></span>${asset.name}</td><td style="text-align:center">${player.shares[i]}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${fmt(value)}</td></tr>`;
       });
-      body.innerHTML = `
-        <table>
-          <tr><th>Asset</th><th style="text-align:center">Shares</th><th style="text-align:right">Value</th></tr>
-          ${rows}
-          <tr style="border-top:1px solid var(--border)"><td><strong>Cash</strong></td><td></td><td style="text-align:right"><strong>${fmt(player.cash)}</strong></td></tr>
-        </table>
-      `;
-
-      header.addEventListener('click', () => {
-        body.classList.toggle('hidden');
-        header.querySelector('.chevron').classList.toggle('open');
-      });
-
+      body.innerHTML = `<table><tr><th>Asset</th><th style="text-align:center">Shares</th><th style="text-align:right">Value</th></tr>${rows}<tr style="border-top:1px solid var(--border)"><td><strong>Cash</strong></td><td></td><td style="text-align:right"><strong>${fmt(player.cash)}</strong></td></tr></table>`;
+      header.addEventListener('click', () => { body.classList.toggle('hidden'); header.querySelector('.chevron').classList.toggle('open'); });
       div.appendChild(header);
       div.appendChild(body);
       container.appendChild(div);
     });
   }
 
-  // --- Confetti ---
-  function launchConfetti() {
-    const colors = ['#6366f1', '#34d399', '#fbbf24', '#f87171', '#a78bfa', '#fb923c'];
-    for (let i = 0; i < 60; i++) {
-      setTimeout(() => {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = Math.random() * 100 + 'vw';
-        piece.style.top = '-10px';
-        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-        document.body.appendChild(piece);
-        setTimeout(() => piece.remove(), 4500);
-      }, i * 30);
+  // ==================== MANUAL DICE ====================
+
+  window.toggleManualMode = function() {
+    manualMode = $('t-manual-check').checked;
+    renderTeacher();
+  };
+
+  function buildManualForm(state) {
+    const grid = $('t-manual-grid');
+    grid.innerHTML = '';
+    state.assets.forEach((a, i) => {
+      grid.innerHTML += `<div class="manual-field"><label style="color:${a.color}">${a.name}</label><select id="manual-asset-${i}" class="input">${[1,2,3,4,5,6].map(v=>`<option value="${v}">${v}</option>`).join('')}</select></div>`;
+    });
+    grid.innerHTML += `<div class="manual-field"><label>Cash Flow</label><select id="manual-cf" class="input">${[1,2,3,4,5,6].map(v=>`<option value="${v}">${v}</option>`).join('')}</select></div>`;
+
+    if (state.round % 2 === 0) {
+      grid.innerHTML += `<div class="manual-field"><label style="color:var(--red)">Bust Die</label><select id="manual-bust" class="input">${[1,2,3,4,5,6].map(v=>`<option value="${v}">${v} = ${BUST_DIE_LABELS[v-1]}</option>`).join('')}</select></div>`;
     }
   }
 
+  window.submitManualDice = function() {
+    const s = gameState;
+    const assetDice = s.assets.map((_, i) => parseInt(document.getElementById('manual-asset-' + i).value));
+    const cashFlowDie = parseInt($('manual-cf').value);
+    let bustDie = null;
+    const bustEl = document.getElementById('manual-bust');
+    if (bustEl) bustDie = parseInt(bustEl.value);
+
+    socket.emit('submit-manual-dice', { assetDice, cashFlowDie, bustDie }, (res) => {
+      if (!res.ok) showToast(res.error || 'Could not submit dice');
+    });
+  };
+
   // ==================== TEACHER ACTIONS ====================
-  window.teacherStartTrading = function() {
-    socket.emit('start-trading', (res) => {
-      if (!res.ok) showToast('Could not start round');
-    });
-  };
 
-  window.teacherLockTrading = function() {
-    socket.emit('lock-trading', (res) => {
-      if (!res.ok) showToast('Could not lock trading');
-    });
-  };
+  window.teacherStartTrading = function() { socket.emit('start-trading', (res) => { if (!res.ok) showToast('Could not start round'); }); };
+  window.teacherLockTrading = function() { socket.emit('lock-trading', (res) => { if (!res.ok) showToast('Could not lock trading'); }); };
+  window.teacherRollDice = function() { socket.emit('roll-dice', (res) => { if (!res.ok) showToast('Could not roll dice'); }); };
+  window.teacherNextRound = function() { socket.emit('next-round', (res) => { if (!res.ok) showToast('Could not advance round'); }); };
+  window.teacherEndGame = function() { if (confirm('End the game now?')) socket.emit('end-game', (res) => { if (!res.ok) showToast('Could not end game'); }); };
 
-  window.teacherRollDice = function() {
-    socket.emit('roll-dice', (res) => {
-      if (!res.ok) showToast('Could not roll dice');
-    });
-  };
+  // ==================== CONFETTI ====================
 
-  window.teacherNextRound = function() {
-    socket.emit('next-round', (res) => {
-      if (!res.ok) showToast('Could not advance round');
-    });
-  };
-
-  window.teacherEndGame = function() {
-    if (confirm('End the game now?')) {
-      socket.emit('end-game', (res) => {
-        if (!res.ok) showToast('Could not end game');
-      });
+  function launchConfetti() {
+    const colors = ['#6366f1','#34d399','#fbbf24','#f87171','#a78bfa','#fb923c'];
+    for (let i = 0; i < 60; i++) {
+      setTimeout(() => {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random()*100+'vw';
+        p.style.top = '-10px';
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.animationDuration = (2+Math.random()*2)+'s';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 4500);
+      }, i * 30);
     }
-  };
+  }
 
 })();
 </script>
